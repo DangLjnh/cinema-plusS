@@ -87,7 +87,7 @@ const SignInPage = () => {
   }, [errors]);
   // const [userCorrect, setUserCorrect] = useState({});
   useEffect(() => {
-    axios.get("http://localhost:8080/get").then((response) => {
+    axios.get("http://localhost:8080/get/users").then((response) => {
       setUsers(response.data);
     });
     axios.get("http://localhost:8080/get/currentUser").then((response) => {
@@ -101,16 +101,24 @@ const SignInPage = () => {
       return values?.email === user.email && values?.password === user.password;
     });
     currentUser = Object.assign({}, ...result);
-    if (result) {
+    if (
+      result &&
+      Object.keys(result).length === 0 &&
+      Object.getPrototypeOf(result)
+    ) {
+      toast.error("Login fail!");
+      return;
+    } else {
       axios
         .post("http://localhost:3000/post/currentUser", {
-          // uid: 5,
+          uid: currentUser.uid,
           displayName: currentUser.displayName,
           email: values.email,
           password: values.password,
           photoURL: "",
           // createdAt: dateCurrent,
-          role: userRole.user,
+          role: currentUser.role,
+          status: currentUser.status,
         })
         .then((res) => console.log("success, dictionary sent,", res))
         .catch((err) => {
@@ -119,8 +127,6 @@ const SignInPage = () => {
       setCurrentUser(currentUser);
       toast.success("Login sucessfull");
       navigate("/");
-    } else {
-      toast.error("Login fail");
     }
   };
   // auth.signOut();

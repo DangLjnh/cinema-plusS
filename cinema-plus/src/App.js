@@ -26,6 +26,7 @@ import SignUpPage from "pages/SignUpPage";
 import axios from "axios";
 import { useContext } from "react";
 import { UserContext } from "contexts/UserProvider";
+import ManageUserPage from "pages/ManageUserPage";
 const App = () => {
   let [currentUser, setCurrentUser] = useContext(UserContext);
   useEffect(() => {
@@ -33,25 +34,7 @@ const App = () => {
       const data = Object.assign({}, ...response.data);
       setCurrentUser(data);
     });
-  }, [currentUser]);
-  // useEffect(() => {
-  //   if (currentUser !== {}) {
-  //     axios
-  //       .post("http://localhost:3000/delete/currentUser", {
-  //         uid: currentUser.uid,
-  //         displayName: currentUser.displayName,
-  //         email: currentUser.email,
-  //         password: currentUser.password,
-  //         photoURL: currentUser.photoURL,
-  //         createdAt: currentUser.createdAt,
-  //         role: currentUser.role,
-  //       })
-  //       .then((res) => console.log("success, dictionary sent,", res))
-  //       .catch((err) => {
-  //         console.log(err.response);
-  //       });
-  //   }
-  // }, [currentUser]);
+  }, []);
   return (
     <Routes>
       <Route path="*" element={<NotFoundPage></NotFoundPage>}></Route>
@@ -97,6 +80,10 @@ const App = () => {
         <Route
           path="/movie/:movieID/watch"
           element={<WatchMoviePage category={tmdbAPI}></WatchMoviePage>}
+        ></Route>
+        <Route
+          path="/manageUser"
+          element={<ManageUserPage category={tmdbAPI}></ManageUserPage>}
         ></Route>
       </Route>
       <Route element={<LayoutDetailTv></LayoutDetailTv>}>

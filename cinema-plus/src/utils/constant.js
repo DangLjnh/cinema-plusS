@@ -10,7 +10,10 @@ export const userRole = {
   admin: 1,
   mod: 2,
   user: 3,
-  editor: 4,
+};
+export const userStatus = {
+  active: 1,
+  ban: 2,
 };
 export const customScroll = {};
 //api key free in imgbb to use upload image detailt

@@ -6,8 +6,7 @@ const port = 8080;
 app.use(cors());
 app.use(express.json());
 
-// Route to get all posts
-app.get("/get", (req, res) => {
+app.get("/get/users", (req, res) => {
   db.query("SELECT * FROM users", (err, result) => {
     if (err) {
       console.log(err);
@@ -26,7 +25,7 @@ app.get("/get/currentUser", (req, res) => {
 });
 app.use(express.json());
 
-app.post("/post", (req, resp) => {
+app.post("/post/user", (req, resp) => {
   let data = {
     // uid: req.body.uid,
     displayName: req.body.displayName,
@@ -34,6 +33,7 @@ app.post("/post", (req, resp) => {
     password: req.body.password,
     photoURL: req.body.photoURL,
     role: req.body.role,
+    status: req.body.status,
   };
   db.query("INSERT INTO users SET ?", data, function (err, resp) {
     if (err) throw err;
@@ -41,12 +41,13 @@ app.post("/post", (req, resp) => {
 });
 app.post("/post/currentUser", (req, resp) => {
   let data = {
-    // uid: req.body.uid,
+    uid: req.body.uid,
     displayName: req.body.displayName,
     email: req.body.email,
     password: req.body.password,
     photoURL: req.body.photoURL,
     role: req.body.role,
+    status: req.body.status,
   };
   db.query("INSERT INTO currentuser SET ?", data, function (err, resp) {
     if (err) throw err;

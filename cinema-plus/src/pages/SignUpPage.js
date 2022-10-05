@@ -10,15 +10,16 @@ import Label from "input/Label";
 import LayoutSignInOut from "layout/LayoutSignInOut";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { userRole } from "utils/constant";
+import { userRole, userStatus } from "utils/constant";
 import { v4 } from "uuid";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from "contexts/UserProvider";
 const SignUpPageStyle = styled.form`
   height: 100vh;
   margin-left: -20px;
@@ -72,15 +73,13 @@ const schema = yup.object({
     .required("Please enter your password"),
 });
 const SignUpPage = () => {
-  const [displayName, setDisplayName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  let [currentUser, setCurrentUser] = useContext(UserContext);
+  const [users, setUsers] = useState("");
   const navigate = useNavigate();
   const {
     control, //mac dinh
     handleSubmit, //sử dụng để lấy value
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
     reset,
     // watch,
     // reset,
@@ -98,43 +97,62 @@ const SignUpPage = () => {
       });
     }
   }, [errors]);
-
+  useEffect(() => {
+    axios.get("http://localhost:8080/get/users").then((response) => {
+      setUsers(response.data);
+    });
+    if (currentUser?.email) navigate("/");
+  }, []);
   const handleSignUp = (values) => {
-    setIsSubmitting(true);
-    setTimeout(() => {
-      console.log(values);
-      axios
-        .post("http://localhost:3000/post", {
-          // uid: 5,
-          displayName: values.displayName,
-          email: values.email,
-          password: values.password,
-          photoURL: "",
-          // createdAt: dateCurrent,
-          role: userRole.user,
-        })
-        .then((res) => console.log("success, dictionary sent,", res))
-        .catch((err) => {
-          console.log(err.response);
+    let userID = 0;
+    const result = users?.filter((user) => {
+      return values?.email === user.email;
+    });
+    if (result === []) {
+      toast.error("Email already exist");
+      return;
+    } else {
+      axios.post("http://localhost:3000/post/user", {
+        displayName: values.displayName,
+        email: values.email,
+        password: values.password,
+        photoURL: "",
+        role: 3,
+        status: 1,
+      });
+      setTimeout(() => {
+        axios.get("http://localhost:8080/get/users").then((response) => {
+          const usersAfter = response.data;
+          const result = usersAfter?.filter((user) => {
+            return values?.email === user.email;
+          });
+          let userCurrent = Object.assign({}, ...result);
+          axios.post("http://localhost:3000/post/currentUser", {
+            uid: userCurrent.uid,
+            displayName: userCurrent.displayName,
+            email: userCurrent.email,
+            password: userCurrent.password,
+            photoURL: "",
+            role: userCurrent.role,
+            status: userCurrent.status,
+          });
+          setCurrentUser(Object.assign({}, ...result));
         });
-      setIsSubmitting(false);
+      }, 1000);
+
+      // axios.post("http://localhost:3000/post/currentUser", {
+      //   // uid: currentUser.uid,
+      //   displayName: values.displayName,
+      //   email: values.email,
+      //   password: values.password,
+      //   photoURL: "",
+      //   // createdAt: dateCurrent,
+      //   role: currentUser.role,
+      //   status: currentUser.status,
+      // });
       toast.success("Register user successfully!");
       navigate("/");
-    }, 1000);
-    // reset({
-    //   displayName: "",
-    //   email: "",
-    //   password: "",
-    // });
-  };
-  const handleChangeDisplayName = (e) => {
-    setDisplayName(e.target.value);
-  };
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
+    }
   };
   return (
     <>
@@ -174,30 +192,15 @@ const SignUpPage = () => {
               </Button>
             </div>
             <Field className={"mb-5"}>
-              <Input
-                type={"text"}
-                name="displayName"
-                onChange={handleChangeDisplayName}
-                control={control}
-              ></Input>
+              <Input type={"text"} name="displayName" control={control}></Input>
               <Label>Display name</Label>
             </Field>
             <Field>
-              <Input
-                type={"email"}
-                name="email"
-                control={control}
-                onChange={handleChangeEmail}
-              ></Input>
+              <Input type={"email"} name="email" control={control}></Input>
               <Label>Email</Label>
             </Field>
             <Field className={"my-5"}>
-              <Input
-                type="password"
-                name="password"
-                onChange={handleChangePassword}
-                control={control}
-              ></Input>
+              <Input type="password" name="password" control={control}></Input>
               <Label>Password</Label>
               <div className="absolute -translate-y-1/2 input-icon right-5 top-1/2">
                 <IconEyeClose></IconEyeClose>

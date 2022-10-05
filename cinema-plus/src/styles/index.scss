@@ -327,3 +327,9 @@ svg {
     transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
   }
 }
+.action:hover {
+  border: 1px solid #dbeafe;
+  svg {
+    stroke: #dbeafe;
+  }
+}
