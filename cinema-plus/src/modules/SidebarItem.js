@@ -99,6 +99,12 @@ const SidebarItem = ({ sidebarList, title }) => {
     <SidebarItemStyle className="menu ">
       <h2 className="text-base font-semibold mb-7 sidebar-title">{title}</h2>
       {sidebarList.map((item) => {
+        if (
+          item.title === "Log out" &&
+          Object.keys(currentUser).length === 0 &&
+          Object.getPrototypeOf(currentUser) === Object.prototype
+        )
+          return null;
         return (
           <NavLink
             className={({ isActive }) => (isActive ? "is-active" : "")}

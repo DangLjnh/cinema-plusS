@@ -27,6 +27,8 @@ import axios from "axios";
 import { useContext } from "react";
 import { UserContext } from "contexts/UserProvider";
 import ManageUserPage from "pages/ManageUserPage";
+import UserUpdate from "components/user/UserUpdate";
+import UserCreate from "components/user/UserCreate";
 const App = () => {
   let [currentUser, setCurrentUser] = useContext(UserContext);
   useEffect(() => {
@@ -82,8 +84,16 @@ const App = () => {
           element={<WatchMoviePage category={tmdbAPI}></WatchMoviePage>}
         ></Route>
         <Route
-          path="/manageUser"
+          path="/manage-user"
           element={<ManageUserPage category={tmdbAPI}></ManageUserPage>}
+        ></Route>
+        <Route
+          path="/manage-user/update-user/:userID"
+          element={<UserUpdate category={tmdbAPI}></UserUpdate>}
+        ></Route>
+        <Route
+          path="/manage-user/create-user"
+          element={<UserCreate category={tmdbAPI}></UserCreate>}
         ></Route>
       </Route>
       <Route element={<LayoutDetailTv></LayoutDetailTv>}>

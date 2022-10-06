@@ -21,19 +21,19 @@ const LabelStatus = ({ children, type = "default" }) => {
       styleClassName = "text-[#5b5a5a] bg-[#a6f4d0]";
       break;
     case "warning":
-      styleClassName = "text-yellow-500 bg-yellow-100";
+      styleClassName = "text-yellow-500 bg-yellow-200";
       break;
     case "danger":
-      styleClassName = "text-[#5b5a5a] bg-red-100";
+      styleClassName = "text-[#5b5a5a] bg-red-200";
       break;
     case "user":
-      styleClassName = "text-[#5b5a5a] bg-[#e5e7ea]";
+      styleClassName = "text-[#5b5a5a] bg-sky-200";
       break;
     case "mod":
-      styleClassName = "text-lime-500 bg-lime-100";
+      styleClassName = "text-[#5b5a5a] bg-purple-200";
       break;
     case "admin":
-      styleClassName = "text-[#5b5a5a] bg-orange-100";
+      styleClassName = "text-[#5b5a5a] bg-yellow-100";
       break;
 
     default:

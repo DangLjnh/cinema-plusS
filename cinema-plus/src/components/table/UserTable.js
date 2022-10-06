@@ -2,20 +2,57 @@ import axios from "axios";
 import ActionDelete from "components/action/ActionDelete";
 import ActionEdit from "components/action/ActionEdit";
 import LabelStatus from "components/label/LabelStatus";
+import { clientSide, serverSide } from "config/config";
+import { UserContext } from "contexts/UserProvider";
 import React from "react";
+import { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 import { userRole, userStatus } from "utils/constant";
 import Table from "./Table";
 const UserTableStyle = styled.div``;
 const UserTable = () => {
   const [users, setUsers] = useState([]);
+  // let [users, setUsers] = useContext(UserContext);
+  const navigate = useNavigate();
   useEffect(() => {
-    axios.get("http://localhost:8080/get/users").then((response) => {
+    axios.get(`${serverSide}/get/users`).then((response) => {
       setUsers(response.data);
     });
   }, []);
+  const handleDeleteUser = (user) => {
+    console.log("🚀 ~ file: UserTable.js ~ line 19 ~ UserTable ~ users", users);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#7877fa",
+      cancelButtonColor: "#ee5253",
+      confirmButtonText: "Yes, delete it!",
+      // iconColor: "#7877fa",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "User has been deleted.",
+          icon: "success",
+          confirmButtonColor: "#7877fa",
+        });
+        axios.post(`${clientSide}/delete/user/${user.uid}`, {
+          uid: user.uid,
+        });
+        setTimeout(() => {
+          axios.get(`${serverSide}/get/users`).then((response) => {
+            setUsers(response.data);
+          });
+        }, 1000);
+      }
+    });
+  };
   const renderLabelStatus = (status) => {
     switch (status) {
       case userStatus.active:
@@ -62,9 +99,13 @@ const UserTable = () => {
         <td>
           <div className="flex items-center gap-x-3">
             <ActionEdit
-            // onClick={() => navigate(`/manage/update-user?id=${user.id}`)}
+              onClick={() => navigate(`/manage-user/update-user/${user.uid}`)}
             ></ActionEdit>
-            <ActionDelete></ActionDelete>
+            <ActionDelete
+              onClick={() => {
+                handleDeleteUser(user);
+              }}
+            ></ActionDelete>
           </div>
         </td>
       </tr>
@@ -80,7 +121,7 @@ const UserTable = () => {
             <th>Email</th>
             <th>Status</th>
             <th>Role</th>
-            <th>Action</th>
+            <th className="bg-">Action</th>
           </tr>
         </thead>
         <tbody>

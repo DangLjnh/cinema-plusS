@@ -91,7 +91,7 @@ const sidebarPersonal = [
         width="18"
         // height="25"
         viewBox="0 0 20 25"
-        // fill="none"
+        fill="none"
         xmlns="http://www.w3.org/2000/svg"
         // fill="red"
       >

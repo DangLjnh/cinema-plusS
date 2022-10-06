@@ -5,8 +5,8 @@ import { useState } from "react";
 export const UserContext = createContext();
 const UserProvider = (props) => {
   const [currentUser, setCurrentUser] = useState({});
-
-  const value = [currentUser, setCurrentUser];
+  const [users, setUsers] = useState([]);
+  const value = [currentUser, setCurrentUser, users, setUsers];
   return <UserContext.Provider value={value} {...props}></UserContext.Provider>;
 };
 

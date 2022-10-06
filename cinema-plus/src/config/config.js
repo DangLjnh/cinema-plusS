@@ -8,7 +8,7 @@ const tvEndpoint = "https://api.themoviedb.org/3/tv";
 // https://api.themoviedb.org/3/discover/movie?api_key=6f98426dd6afd025ac4266b4ae12bdd6&with_genres=18?sort_by=popularity.desc
 // http://api.themoviedb.org/3/search/keyword?api_key=95f2419536f533cdaa1dadf83c606027&query=one
 // https://api.themoviedb.org/3/discover/movie?api_key=95f2419536f533cdaa1dadf83c606027&with_genres=35&sort_by=popularity.desc
-export const tmdbAPI = {
+const tmdbAPI = {
   getMovieList: (type, page = 1) =>
     `${tmdbEndpoint}/${type}?api_key=${apiKey}&page=${page}`,
   getTrendingMovie: `https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}`,
@@ -31,7 +31,7 @@ export const tmdbAPI = {
   searchKeyWord: (query) =>
     `http://api.themoviedb.org/3/search/keyword?api_key=${apiKey}&query=${query}`,
 };
-export const tvAPI = {
+const tvAPI = {
   getTvList: (type, page = 1) =>
     `${tvEndpoint}/${type}?api_key=${apiKey}&page=${page}`,
   getTrendingTv: `https://api.themoviedb.org/3/trending/tv/day?api_key=${apiKey}`,
@@ -48,6 +48,9 @@ export const tvAPI = {
     `https://api.themoviedb.org/3/person/${castID}/tv_credits?api_key=${apiKey}`,
   imageOriginalTV: (url) => `https://image.tmdb.org/t/p/original${url}`,
 };
+const serverSide = "http://localhost:8080";
+const clientSide = "http://localhost:3000";
+export { tmdbAPI, tvAPI, serverSide, clientSide };
 
 /**
    * const { data: currencyName } = useSWR(tmdbAPI.currencyName, fetcher);

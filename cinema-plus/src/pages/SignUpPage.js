@@ -20,6 +20,7 @@ import { v4 } from "uuid";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "contexts/UserProvider";
+import { clientSide, serverSide } from "config/config";
 const SignUpPageStyle = styled.form`
   height: 100vh;
   margin-left: -20px;
@@ -98,7 +99,7 @@ const SignUpPage = () => {
     }
   }, [errors]);
   useEffect(() => {
-    axios.get("http://localhost:8080/get/users").then((response) => {
+    axios.get(`${serverSide}/get/users`).then((response) => {
       setUsers(response.data);
     });
     if (currentUser?.email) navigate("/");
@@ -112,7 +113,7 @@ const SignUpPage = () => {
       toast.error("Email already exist");
       return;
     } else {
-      axios.post("http://localhost:3000/post/user", {
+      axios.post(`${clientSide}/post/user`, {
         displayName: values.displayName,
         email: values.email,
         password: values.password,
@@ -121,13 +122,13 @@ const SignUpPage = () => {
         status: 1,
       });
       setTimeout(() => {
-        axios.get("http://localhost:8080/get/users").then((response) => {
+        axios.get(`${serverSide}/get/users`).then((response) => {
           const usersAfter = response.data;
           const result = usersAfter?.filter((user) => {
             return values?.email === user.email;
           });
           let userCurrent = Object.assign({}, ...result);
-          axios.post("http://localhost:3000/post/currentUser", {
+          axios.post(`${clientSide}/post/currentUser`, {
             uid: userCurrent.uid,
             displayName: userCurrent.displayName,
             email: userCurrent.email,

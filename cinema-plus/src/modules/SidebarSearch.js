@@ -87,7 +87,7 @@ const SidebarSearch = ({ className }) => {
     setCast(true);
   };
   return (
-    <SidebarSearchStyle className="fixed w-[250px] right-[20px] z-[100]">
+    <SidebarSearchStyle className="fixed w-[250px] right-[20px] z-[2]">
       <LayoutSF title="Search results" name="">
         <div className="mt-[-10px]">
           <div

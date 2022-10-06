@@ -24,6 +24,7 @@ import { useContext } from "react";
 import { UserContext } from "contexts/UserProvider";
 import { setCurrentUser } from "redux/movieSlice";
 import { userRole } from "utils/constant";
+import { clientSide, serverSide } from "config/config";
 const SignInPageStyle = styled.form`
   height: 100vh;
   margin-left: -20px;
@@ -87,12 +88,8 @@ const SignInPage = () => {
   }, [errors]);
   // const [userCorrect, setUserCorrect] = useState({});
   useEffect(() => {
-    axios.get("http://localhost:8080/get/users").then((response) => {
+    axios.get(`${serverSide}/get/users`).then((response) => {
       setUsers(response.data);
-    });
-    axios.get("http://localhost:8080/get/currentUser").then((response) => {
-      const data = Object.assign({}, ...response.data);
-      setCurrentUser(data);
     });
     if (currentUser?.email) navigate("/");
   }, []);
@@ -110,7 +107,7 @@ const SignInPage = () => {
       return;
     } else {
       axios
-        .post("http://localhost:3000/post/currentUser", {
+        .post(`${clientSide}/post/currentUser`, {
           uid: currentUser.uid,
           displayName: currentUser.displayName,
           email: values.email,

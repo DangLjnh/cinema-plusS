@@ -39,7 +39,7 @@ const MovieListSearch = () => {
       {loading ? (
         <MovieListSkeleton number={20}></MovieListSkeleton>
       ) : (
-        <>
+        <div>
           <div className="search-list">
             {search &&
               searchMovieList.length > 0 &&
@@ -51,7 +51,7 @@ const MovieListSearch = () => {
               })}
           </div>
           <Paginate totalResults={searchMovieTotal.total_results}></Paginate>
-        </>
+        </div>
       )}
     </MovieSearchStyle>
   );
