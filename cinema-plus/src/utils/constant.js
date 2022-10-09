@@ -15,5 +15,10 @@ export const userStatus = {
   active: 1,
   ban: 2,
 };
+export const userProvider = {
+  cinemaPlus: 1,
+  google: 2,
+  facebook: 3,
+};
 export const customScroll = {};
 //api key free in imgbb to use upload image detailt

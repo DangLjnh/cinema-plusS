@@ -1,7 +1,13 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 import styled from "styled-components";
+import axios from "axios";
+import { useContext } from "react";
+import { UserContext } from "contexts/UserProvider";
+import { toast } from "react-toastify";
+import { auth } from "../firebase/config";
+import { deleteUser } from "firebase/auth";
 const SidebarItemStyle = styled.div`
   .sidebar-item-title {
     background: ${(props) => props.theme.gradiendGray};
@@ -81,6 +87,9 @@ const SidebarItemStyle = styled.div`
   }
 `;
 const SidebarItemDetail = ({ sidebarList, title }) => {
+  const navigate = useNavigate();
+  let [currentUser, setCurrentUser] = useContext(UserContext);
+  const user = auth.currentUser;
   if (!sidebarList) return null;
   return (
     <SidebarItemStyle className="menu">
@@ -88,8 +97,32 @@ const SidebarItemDetail = ({ sidebarList, title }) => {
         return (
           <NavLink
             className={({ isActive }) => (isActive ? "is-active" : "")}
-            to={item.url}
+            to={item?.url}
             key={v4()}
+            onClick={() => {
+              if (item.title === "Log out") {
+                setCurrentUser({});
+                axios
+                  .post("http://localhost:3000/delete/currentUser", {
+                    uid: currentUser.uid,
+                    displayName: currentUser.displayName,
+                    email: currentUser.email,
+                    password: currentUser.password,
+                    photoURL: currentUser.photoURL,
+                    createdAt: currentUser.createdAt,
+                    role: currentUser.role,
+                  })
+                  .then((res) => console.log("success, dictionary sent,", res))
+                  .catch((err) => {
+                    console.log(err.response);
+                  });
+                navigate("/sign-in");
+                toast.success("Log out successfull!");
+                auth.signOut();
+                deleteUser(user);
+                window.location.reload();
+              }
+            }}
           >
             <div
               className={`relative flex items-center h-full mb-[30px] text-[15px] menu-item sidebar-item hover:text-blueLight`}

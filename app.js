@@ -42,13 +42,15 @@ app.post("/post/user", (req, resp) => {
     // uid: req.body.uid,
     displayName: req.body.displayName,
     email: req.body.email,
-    password: req.body.password,
+    password: req.body.password || null,
     photoURL: req.body.photoURL,
     role: req.body.role,
     status: req.body.status,
+    provider: req.body.provider,
   };
-  db.query("INSERT INTO users SET ?", data, function (err, resp) {
-    if (err) throw err;
+  db.query("INSERT INTO users SET ?", data, function (err, result) {
+    // if (err) throw err;
+    resp.send(result);
   });
 });
 app.post("/post/currentUser", (req, resp) => {
@@ -60,9 +62,11 @@ app.post("/post/currentUser", (req, resp) => {
     photoURL: req.body.photoURL,
     role: req.body.role,
     status: req.body.status,
+    provider: req.body.provider,
   };
-  db.query("INSERT INTO currentuser SET ?", data, function (err, resp) {
+  db.query("INSERT INTO currentuser SET ?", data, function (err, result) {
     if (err) throw err;
+    resp.send(result);
   });
 });
 app.post("/post/updateUser", (req, resp) => {
@@ -75,9 +79,27 @@ app.post("/post/updateUser", (req, resp) => {
     status: req.body.status,
   };
   let uid = req.body.uid;
-  db.query(`UPDATE users SET ? WHERE uid = ${uid}`, data, function (err, resp) {
-    if (err) throw err;
-  });
+  db.query(
+    `UPDATE users SET ? WHERE uid = ${uid}`,
+    data,
+    function (err, result) {
+      if (err) throw err;
+      resp.send(result);
+    }
+  );
+});
+app.post("/post/bookmark/:movieID", (req, resp) => {
+  console.log(req.body);
+  // let data = {
+  //   uid: req.body.uid,
+  //   displayName: req.body.displayName,
+  //   email: req.body.email,
+  //   filmID: req.body.filmID,
+  // };
+  // db.query("INSERT INTO bookmark SET ?", data, function (err, result) {
+  //   if (err) throw err;
+  //   resp.send(result);
+  // });
 });
 // app.post("/upload", function (req, res) {
 //   console.log(req.files.foo); // the uploaded file object
@@ -94,6 +116,7 @@ app.post("/delete/currentUser", (req, resp) => {
 app.post("/delete/user/:userID", (req, resp) => {
   const { uid } = req?.body;
   db.query(`DELETE FROM users WHERE uid=${uid}`, (err, result) => {
+    resp.send(result);
     if (err) {
       console.log(err);
     }

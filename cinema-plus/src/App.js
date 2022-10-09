@@ -83,6 +83,8 @@ const App = () => {
           path="/movie/:movieID/watch"
           element={<WatchMoviePage category={tmdbAPI}></WatchMoviePage>}
         ></Route>
+      </Route>
+      <Route element={<LayoutDetail columnRight></LayoutDetail>}>
         <Route
           path="/manage-user"
           element={<ManageUserPage category={tmdbAPI}></ManageUserPage>}

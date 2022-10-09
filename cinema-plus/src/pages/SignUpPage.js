@@ -15,12 +15,15 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { userRole, userStatus } from "utils/constant";
+import { userProvider, userRole, userStatus } from "utils/constant";
 import { v4 } from "uuid";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "contexts/UserProvider";
 import { clientSide, serverSide } from "config/config";
+import ButtonFB from "components/button/ButtonFB";
+import ButtonGG from "components/button/ButtonGG";
+import ShowPassword from "components/other/ShowPassword";
 const SignUpPageStyle = styled.form`
   height: 100vh;
   margin-left: -20px;
@@ -75,12 +78,13 @@ const schema = yup.object({
 });
 const SignUpPage = () => {
   let [currentUser, setCurrentUser] = useContext(UserContext);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [users, setUsers] = useState("");
   const navigate = useNavigate();
   const {
     control, //mac dinh
     handleSubmit, //sử dụng để lấy value
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isValid },
     reset,
     // watch,
     // reset,
@@ -105,54 +109,61 @@ const SignUpPage = () => {
     if (currentUser?.email) navigate("/");
   }, []);
   const handleSignUp = (values) => {
-    let userID = 0;
+    setIsSubmitting(true);
     const result = users?.filter((user) => {
-      return values?.email === user.email;
+      return (
+        values?.email === user.email &&
+        userProvider.cinemaPlus === user.provider
+      );
     });
-    if (result === []) {
+    if (Object.keys(result).length !== 0) {
       toast.error("Email already exist");
       return;
     } else {
-      axios.post(`${clientSide}/post/user`, {
-        displayName: values.displayName,
-        email: values.email,
-        password: values.password,
-        photoURL: "",
-        role: 3,
-        status: 1,
-      });
-      setTimeout(() => {
-        axios.get(`${serverSide}/get/users`).then((response) => {
-          const usersAfter = response.data;
-          const result = usersAfter?.filter((user) => {
-            return values?.email === user.email;
-          });
-          let userCurrent = Object.assign({}, ...result);
-          axios.post(`${clientSide}/post/currentUser`, {
-            uid: userCurrent.uid,
-            displayName: userCurrent.displayName,
-            email: userCurrent.email,
-            password: userCurrent.password,
-            photoURL: "",
-            role: userCurrent.role,
-            status: userCurrent.status,
-          });
-          setCurrentUser(Object.assign({}, ...result));
+      axios
+        .post(`${clientSide}/post/user`, {
+          displayName: values.displayName,
+          email: values.email,
+          password: values.password,
+          photoURL: "",
+          role: userRole.user,
+          status: userStatus.active,
+          provider: userProvider.cinemaPlus,
+        })
+        .then((res) => {
+          if (res) {
+            axios.get(`${serverSide}/get/users`).then((response) => {
+              const usersAfter = response.data;
+              const result = usersAfter?.filter((user) => {
+                return values?.email === user.email;
+              });
+              let userCurrent = Object.assign({}, ...result);
+              if (Object.keys(result).length !== 0) {
+                axios
+                  .post(`${clientSide}/post/currentUser`, {
+                    uid: userCurrent.uid,
+                    displayName: userCurrent.displayName,
+                    email: userCurrent.email,
+                    password: userCurrent.password,
+                    photoURL: "",
+                    role: userCurrent.role,
+                    status: userCurrent.status,
+                    provider: userCurrent.provider,
+                  })
+                  .then((res) => {
+                    if (res) {
+                      setCurrentUser(Object.assign({}, ...result));
+                      setIsSubmitting(false);
+                      toast.success("Register user successfully!");
+                      navigate("/");
+                    }
+                  });
+              }
+            });
+          }
         });
-      }, 1000);
 
-      // axios.post("http://localhost:3000/post/currentUser", {
-      //   // uid: currentUser.uid,
-      //   displayName: values.displayName,
-      //   email: values.email,
-      //   password: values.password,
-      //   photoURL: "",
-      //   // createdAt: dateCurrent,
-      //   role: currentUser.role,
-      //   status: currentUser.status,
-      // });
-      toast.success("Register user successfully!");
-      navigate("/");
+      //
     }
   };
   return (
@@ -165,32 +176,8 @@ const SignUpPage = () => {
             <SignInUpTitle>Sign up</SignInUpTitle>
             <p className="mt-3 text-center">Welcome to Cinema Plus!</p>
             <div className="flex gap-x-5 social">
-              <Button
-                bgColor={"white"}
-                className={"w-1/2 my-5 text-black relative"}
-              >
-                <span className="flex items-center justify-center gap-x-3">
-                  <img
-                    src="https://kt.city/static/icon-social-google.svg"
-                    alt=""
-                    className="w-[25px] h-[25px]"
-                  />
-                  <span>Google</span>
-                </span>
-              </Button>
-              <Button
-                bgColor={"fb"}
-                className={"w-1/2 my-5 text-black relative"}
-              >
-                <span className="flex items-center justify-center gap-x-3">
-                  <img
-                    src="https://kt.city/static/icon-social-facebook.svg"
-                    alt=""
-                    className="w-[25px h-[25px]"
-                  />
-                  <span className="text-white">Facebook</span>
-                </span>
-              </Button>
+              <ButtonGG></ButtonGG>
+              <ButtonFB></ButtonFB>
             </div>
             <Field className={"mb-5"}>
               <Input type={"text"} name="displayName" control={control}></Input>
@@ -201,15 +188,11 @@ const SignUpPage = () => {
               <Label>Email</Label>
             </Field>
             <Field className={"my-5"}>
-              <Input type="password" name="password" control={control}></Input>
-              <Label>Password</Label>
-              <div className="absolute -translate-y-1/2 input-icon right-5 top-1/2">
-                <IconEyeClose></IconEyeClose>
-              </div>
+              <ShowPassword control={control} haveLabel></ShowPassword>
             </Field>
             <Button
               type="submit"
-              className={`w-full text-white `}
+              className={`w-full text-white h-[48px]`}
               isLoading={isSubmitting}
               disabled={isSubmitting}
             >

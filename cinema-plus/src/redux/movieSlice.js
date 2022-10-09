@@ -15,7 +15,7 @@ const date = new Date().getDate();
 const month = new Date().getMonth();
 const year = new Date().getFullYear();
 const currentDate = `${year}-${month + 1 < 10 ? `0${month + 1}` : month + 1}-${
-  date + 1 < 10 ? `0${date}` : date
+  date < 10 ? `0${date}` : date
 }`;
 export const setLoading = createAction("setLoading");
 export const setQueryNow = createAction("setQueryNow");
@@ -42,7 +42,6 @@ export const setDateTo = createAction("setDateTo");
 export const setOptionDetail = createAction("setOptionDetail");
 export const setTotalPage = createAction("setTotalPage");
 export const setDataCast = createAction("setDataCast");
-export const setCurrentUser = createAction("setCurrentUser");
 
 const initialState = {
   results: [],
@@ -73,14 +72,14 @@ const initialState = {
   runtimeFrom: "0",
   dateFrom: `2002-11-04`,
   currentDate: `${year}-${month + 1 < 10 ? `0${month + 1}` : month + 1}-${
-    date + 1 < 10 ? `0${date}` : date
+    date < 10 ? `0${date}` : date
   }`,
   dateTo: `${String(currentDate)}`,
+  // dateTo: `2022-11-04`,
   optionDetail: "Descending",
   totalPage: 0,
   dataCast: {},
   detailUser: {},
-  currentUser: {},
 };
 
 const movieSlice = createSlice({
@@ -224,9 +223,6 @@ const movieSlice = createSlice({
       })
       .addCase(setDataCast, (state, action) => {
         state.dataCast = action.payload;
-      })
-      .addCase(setCurrentUser, (state, action) => {
-        state.currentUser = action.payload;
       });
   },
 });

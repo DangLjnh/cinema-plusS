@@ -1,4 +1,6 @@
+import { UserContext } from "contexts/UserProvider";
 import React from "react";
+import { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { withErrorBoundary } from "react-error-boundary";
@@ -17,26 +19,28 @@ const PaginateStyle = styled.div`
       cursor: pointer;
     }
     li:not(:first-child, :last-child) {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      font-size: 15px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #262628;
-      &:hover {
-        background-color: #404040;
+      a {
+        padding: 8px 15px;
+        border-radius: 50%;
+        font-size: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #262628;
+        &:hover {
+          background-color: #404040;
+        }
       }
     }
     .selected {
-      color: white;
-      background-color: ${(props) => props.theme.blueLight} !important;
+      a {
+        color: white;
+        background-color: ${(props) => props.theme.blueLight} !important;
+      }
     }
   }
 `;
-const itemsPerPage = 20;
-const Paginate = ({ totalResults, className = "" }) => {
+const Paginate = ({ totalResults, className = "", itemsPerPage = 20 }) => {
   const dispatch = useDispatch();
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);

@@ -8,7 +8,7 @@ const BookmarkPage = () => {
   return (
     <div>
       <SidebarBookmarkHistory></SidebarBookmarkHistory>{" "}
-      <Dropdown
+      {/* <Dropdown
         className={`w-[200px] min-w-[135px] text-neutral-400  relative`}
       >
         <Dropdown.Select className="cursor-pointer">hihi</Dropdown.Select>
@@ -17,7 +17,7 @@ const BookmarkPage = () => {
             hihi
           </Dropdown.Option>
         </Dropdown.List>
-      </Dropdown>
+      </Dropdown> */}
       <MovieListDiscovery
         className="mt-5"
         category={tmdbAPI}

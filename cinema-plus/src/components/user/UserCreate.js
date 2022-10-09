@@ -1,19 +1,32 @@
 import axios from "axios";
 import Button from "components/button/Button";
 import FieldCheckboxes from "components/field/FieldCheckboxes";
+import ShowPassword from "components/other/ShowPassword";
 import Radio from "components/radio/Radio";
 import ManageUserTitle from "components/title/ManageUserTitle";
-import { clientSide } from "config/config";
+import { clientSide, serverSide } from "config/config";
 import Field from "input/Field";
 import Input from "input/Input";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { userRole, userStatus } from "utils/constant";
-
+import { userProvider, userRole, userStatus } from "utils/constant";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from "react";
+import { useState } from "react";
+const schema = yup.object({
+  email: yup.string().email().required("Please enter your email address"),
+  password: yup
+    .string()
+    .min(8, "Your password must be at least 8 characters or greater")
+    .required("Please enter your password"),
+  displayName: yup.string().required("Please enter your display name"),
+});
 const UserCreate = () => {
   const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
   const {
     control, //mac dinh
     handleSubmit, //sử dụng để lấy value
@@ -28,28 +41,54 @@ const UserCreate = () => {
       status: userStatus.active,
       role: userRole.user,
     },
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
   });
   const watchStatus = Number(watch("status"));
   const watchRole = Number(watch("role"));
+  useEffect(() => {
+    const arrayErrors = Object.values(errors);
+    if (arrayErrors.length > 0) {
+      toast.error(arrayErrors[0]?.message, {
+        pauseOnHover: false,
+        delay: 0,
+      });
+    }
+  }, [errors]);
+  useEffect(() => {
+    axios.get(`${serverSide}/get/users`).then((response) => {
+      setUsers(response.data);
+    });
+  }, []);
   const handleCreateUser = (values) => {
-    axios.post(`${clientSide}/post/user`, {
-      displayName: values.displayName,
-      email: values.email,
-      password: values.password,
-      photoURL: "",
-      role: values.role,
-      status: values.status,
+    const result = users?.filter((user) => {
+      return (
+        values?.email === user.email &&
+        userProvider.cinemaPlus === user.provider
+      );
     });
-    toast.success("Create user successful");
-    reset({
-      displayName: "",
-      email: "",
-      password: "",
-      photoURL: "",
-      role: userRole.user,
-      status: userStatus.active,
-    });
+    if (result.length > 0) {
+      toast.error("Email already exist");
+      return;
+    } else {
+      axios.post(`${clientSide}/post/user`, {
+        displayName: values.displayName,
+        email: values.email,
+        password: values.password,
+        photoURL: "",
+        role: values.role,
+        status: values.status,
+        provider: userProvider.cinemaPlus,
+      });
+      toast.success("Create user successful");
+      reset({
+        displayName: "",
+        email: "",
+        password: "",
+        photoURL: "",
+        role: userRole.user,
+        status: userStatus.active,
+      });
+    }
   };
   return (
     <div>
@@ -137,12 +176,10 @@ const UserCreate = () => {
         <div className="form-layout">
           <Field>
             <p className="mb-3 text-[17px] text-white">Password</p>
-            <Input
-              className="!p-4"
-              type={"password"}
-              name="password"
+            <ShowPassword
+              classNameInput="!p-4"
               control={control}
-            ></Input>
+            ></ShowPassword>
           </Field>
         </div>
         <div className="form-layout">
@@ -197,14 +234,14 @@ const UserCreate = () => {
             </FieldCheckboxes>
           </Field>
         </div>
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center mb-10">
           <Button
             type="submit"
             className={"text-white w-[148px] h-[48px]"}
             // isLoading={loading}
             // disabled={loading}
           >
-            Update User
+            Create User
           </Button>
         </div>
       </form>

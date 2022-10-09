@@ -2,6 +2,7 @@ import axios from "axios";
 import Button from "components/button/Button";
 import FieldCheckboxes from "components/field/FieldCheckboxes";
 import ImageUpload from "components/image/ImageUpLoad";
+import ShowPassword from "components/other/ShowPassword";
 import Radio from "components/radio/Radio";
 import ManageUserTitle from "components/title/ManageUserTitle";
 import { clientSide, serverSide } from "config/config";
@@ -16,19 +17,35 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { userRole, userStatus } from "utils/constant";
-
+import { userProvider, userRole, userStatus } from "utils/constant";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 const UserUpdate = () => {
   const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState([]);
   const { userID } = useParams();
   const navigate = useNavigate();
   let [userDetail, setUserDetail] = useState({});
+  const schema = yup.object({
+    email: yup.string().email().required("Please enter your email address"),
+    password:
+      userDetail.provider === userProvider.cinemaPlus &&
+      yup
+        .string()
+        .min(8, "Your password must be at least 8 characters or greater")
+        .required("Please enter your password"),
+    displayName: yup.string().required("Please enter your display name"),
+  });
   useEffect(() => {
     axios
       .post(`${serverSide}/get/userItem`, {
         uid: userID,
       })
       .then((res) => setUserDetail(Object.assign({}, ...res.data)));
+    axios.get(`${serverSide}/get/users`).then((response) => {
+      setUsers(response.data);
+    });
+    window.scrollTo(0, 0);
   }, []);
   const {
     control, //mac dinh
@@ -40,10 +57,19 @@ const UserUpdate = () => {
     //mac dinh
   } = useForm({
     mode: onchange,
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
   });
   const watchStatus = Number(watch("status"));
   const watchRole = Number(watch("role"));
+  useEffect(() => {
+    const arrayErrors = Object.values(errors);
+    if (arrayErrors.length > 0) {
+      toast.error(arrayErrors[0]?.message, {
+        pauseOnHover: false,
+        delay: 0,
+      });
+    }
+  }, [errors]);
   const handleUpdateUser = (values) => {
     // for (let i = 0; i < values.file.length; i++) {
     //   const file = values.file[i];
@@ -52,21 +78,35 @@ const UserUpdate = () => {
     // for (const file of values.file) {
     //   console.log(`\n${file}`);
     // }
+    const data = new FormData();
+    data.append("file", values.file[0]);
     setLoading(true);
-    axios.post(`${clientSide}/post/updateUser`, {
-      uid: values.uid,
-      displayName: values.displayName,
-      email: values.email,
-      password: values.password,
-      photoURL: "",
-      role: values.role,
-      status: values.status,
+    const result = users?.filter((user) => {
+      return values?.email === user.email;
     });
-    setTimeout(() => {
+    if (result.length > 0 && userDetail.email !== values.email) {
+      toast.error("Email already exist");
       setLoading(false);
-      toast.success("Update user successfully!");
-      navigate("/manage-user");
-    }, 1000);
+      return;
+    } else {
+      axios
+        .post(`${clientSide}/post/updateUser`, {
+          uid: values.uid,
+          displayName: values.displayName,
+          email: values.email,
+          password: values.password,
+          photoURL: data.append("file", values.file[0]),
+          role: values.role,
+          status: values.status,
+        })
+        .then((res) => {
+          if (res) {
+            toast.success("Update user successfully!");
+            setLoading(false);
+            navigate("/manage-user");
+          }
+        });
+    }
   };
   useEffect(() => {
     reset(userDetail);
@@ -149,6 +189,9 @@ const UserUpdate = () => {
             <Input
               className="!p-4"
               type={"email"}
+              disabled={
+                userDetail.provider === userProvider.cinemaPlus ? false : true
+              }
               name="email"
               control={control}
             ></Input>
@@ -157,12 +200,13 @@ const UserUpdate = () => {
         <div className="form-layout">
           <Field>
             <p className="mb-3 text-[17px] text-white">Password</p>
-            <Input
-              className="!p-4"
-              type={"password"}
-              name="password"
+            <ShowPassword
+              classNameInput="!p-4"
               control={control}
-            ></Input>
+              disabled={
+                userDetail.provider === userProvider.cinemaPlus ? false : true
+              }
+            ></ShowPassword>
           </Field>
         </div>
         <div className="form-layout">
@@ -217,10 +261,10 @@ const UserUpdate = () => {
             </FieldCheckboxes>
           </Field>
         </div>
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center mb-10">
           <Button
             type="submit"
-            className={"text-white h-[48px]"}
+            className={"text-white w-[147px] h-[48px]"}
             isLoading={loading}
             disabled={loading}
           >

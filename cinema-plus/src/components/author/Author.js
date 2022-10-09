@@ -38,11 +38,11 @@ const Author = () => {
 
       {currentUser && Object.keys(currentUser).length !== 0 && (
         <AuthorStyled className="flex items-center gap-x-5">
-          <h3 className="text-sm text-white author-name">
+          <h3 className="text-sm text-white capitalize author-name">
             {currentUser.displayName}
           </h3>
           <img
-            src="https://images.unsplash.com/photo-1657299141984-dd9196274cde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+            src={currentUser.photoURL || "../user.png"}
             alt=""
             className="object-cover w-10 h-10 rounded-full"
           />

@@ -12,7 +12,7 @@ import WatchOverview from "components/watch/WatchOverview";
 import { useEffect } from "react";
 import { Dropdown } from "components/dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { setOptionDetail } from "redux/movieSlice";
+import { setHistory, setOptionDetail } from "redux/movieSlice";
 import CommentReply from "components/comment/CommentReply";
 import CommentList from "components/comment/CommentList";
 import CommentInput from "components/comment/CommentInput";
@@ -80,6 +80,7 @@ const WatchMoviePage = ({ category }) => {
   const { movieID, tvID } = useParams();
   const dispatch = useDispatch();
   const { optionDetail } = useSelector((state) => state.news);
+
   const result = useSWR(
     category === tmdbAPI
       ? tmdbAPI.getMovieDetail(movieID)
@@ -90,6 +91,7 @@ const WatchMoviePage = ({ category }) => {
   useEffect(() => {
     document.title = `Watch: ${data?.title} | Cinema Plus`;
     String(dispatch(setOptionDetail("Descending")));
+    // dispatch(setHistory(resultHistory));
     // window.scroll(0, 0);
   }, [data, dispatch]);
   if (!data) return null;

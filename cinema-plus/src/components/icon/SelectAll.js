@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 const SelectAllStyle = styled.div`
   &:hover {
-    color: #6680c0;
+    color: #10ac84;
     svg {
       path {
-        stroke: #6680c0;
+        stroke: #10ac84;
       }
     }
   }

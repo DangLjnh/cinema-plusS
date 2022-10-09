@@ -1,11 +1,13 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 import styled from "styled-components";
 import { useContext } from "react";
 import { UserContext } from "contexts/UserProvider";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { auth } from "../firebase/config";
+import { deleteUser } from "firebase/auth";
 const SidebarItemStyle = styled.div`
   .sidebar-item-title {
     background: ${(props) => props.theme.gradiendGray};
@@ -94,6 +96,8 @@ const SidebarItemStyle = styled.div`
 `;
 const SidebarItem = ({ sidebarList, title }) => {
   let [currentUser, setCurrentUser] = useContext(UserContext);
+  const navigate = useNavigate();
+  const user = auth.currentUser;
   if (!sidebarList) return null;
   return (
     <SidebarItemStyle className="menu ">
@@ -112,6 +116,7 @@ const SidebarItem = ({ sidebarList, title }) => {
             key={v4()}
             onClick={() => {
               if (item.title === "Log out") {
+                setCurrentUser({});
                 axios
                   .post("http://localhost:3000/delete/currentUser", {
                     uid: currentUser.uid,
@@ -126,8 +131,11 @@ const SidebarItem = ({ sidebarList, title }) => {
                   .catch((err) => {
                     console.log(err.response);
                   });
+                navigate("/sign-in");
                 toast.success("Log out successfull!");
-                setCurrentUser({});
+                auth.signOut();
+                deleteUser(user);
+                window.location.reload();
               }
             }}
           >

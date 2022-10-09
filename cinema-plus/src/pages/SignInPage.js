@@ -25,6 +25,7 @@ import { UserContext } from "contexts/UserProvider";
 import { setCurrentUser } from "redux/movieSlice";
 import { userRole } from "utils/constant";
 import { clientSide, serverSide } from "config/config";
+import ShowPassword from "components/other/ShowPassword";
 const SignInPageStyle = styled.form`
   height: 100vh;
   margin-left: -20px;
@@ -60,7 +61,7 @@ const schema = yup.object({
 
 const SignInPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [users, setUsers] = useState([]);
   let [currentUser, setCurrentUser] = useContext(UserContext);
   const {
@@ -74,9 +75,6 @@ const SignInPage = () => {
     mode: onchange,
     resolver: yupResolver(schema),
   });
-  // useEffect(() => {
-  //   if (currentUser?.email) navigate("/");
-  // }, [currentUser, navigate]);
   useEffect(() => {
     const arrayErrors = Object.values(errors);
     if (arrayErrors.length > 0) {
@@ -86,14 +84,14 @@ const SignInPage = () => {
       });
     }
   }, [errors]);
-  // const [userCorrect, setUserCorrect] = useState({});
   useEffect(() => {
     axios.get(`${serverSide}/get/users`).then((response) => {
       setUsers(response.data);
     });
     if (currentUser?.email) navigate("/");
-  }, []);
+  }, [currentUser]);
   const handleSignIn = (values) => {
+    setIsSubmitting(true);
     const result = users?.filter((user) => {
       return values?.email === user.email && values?.password === user.password;
     });
@@ -104,6 +102,9 @@ const SignInPage = () => {
       Object.getPrototypeOf(result)
     ) {
       toast.error("Login fail!");
+      return;
+    } else if (currentUser.status === 2) {
+      toast.error("Your account has been banned");
       return;
     } else {
       axios
@@ -116,14 +117,23 @@ const SignInPage = () => {
           // createdAt: dateCurrent,
           role: currentUser.role,
           status: currentUser.status,
+          provider: currentUser.provider,
         })
-        .then((res) => console.log("success, dictionary sent,", res))
+        .then((res) => {
+          if (res) {
+            console.log(
+              "🚀 ~ file: SignInPage.js ~ line 123 ~ .then ~ res",
+              res
+            );
+            setCurrentUser(currentUser);
+            setIsSubmitting(false);
+            toast.success("Login sucessfull");
+            navigate("/");
+          }
+        })
         .catch((err) => {
           console.log(err.response);
         });
-      setCurrentUser(currentUser);
-      toast.success("Login sucessfull");
-      navigate("/");
     }
   };
   // auth.signOut();
@@ -147,17 +157,14 @@ const SignInPage = () => {
               <Label>Email</Label>
             </Field>
             <Field className={"my-5"}>
-              <Input
-                type={"password"}
-                name="password"
-                control={control}
-              ></Input>
-              <Label>Password</Label>
-              <div className="absolute -translate-y-1/2 input-icon right-5 top-1/2">
-                <IconEyeClose></IconEyeClose>
-              </div>
+              <ShowPassword control={control} haveLabel></ShowPassword>
             </Field>
-            <Button type="submit" className={"w-full text-white "}>
+            <Button
+              type="submit"
+              className={"w-full text-white h-[48px]"}
+              isLoading={isSubmitting}
+              disabled={isSubmitting}
+            >
               Sign in
             </Button>
             <p className="mt-5 text-center">

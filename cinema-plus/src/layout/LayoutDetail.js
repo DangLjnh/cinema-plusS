@@ -12,7 +12,8 @@ const LayoutDetailStyle = styled.div`
   }
   .layout-main-detail {
     display: grid;
-    grid-template-columns: 50px minmax(0, 1fr) 250px;
+    grid-template-columns: 50px minmax(0, 1fr) ${(props) =>
+        props.columnRight ? "" : "250px"};
     column-gap: 50px;
   }
   @media screen and (max-width: 1023.98px) {
@@ -35,9 +36,9 @@ const LayoutDetailStyle = styled.div`
   }
 `;
 
-const LayoutDetail = () => {
+const LayoutDetail = ({ columnRight = false }) => {
   return (
-    <LayoutDetailStyle>
+    <LayoutDetailStyle columnRight={columnRight}>
       <Header page="home" className="header-detail"></Header>
       <div className="layout-main-detail">
         <SidebarDetail></SidebarDetail>
