@@ -8,6 +8,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { userProvider } from "utils/constant";
 
 const ProfilePage = () => {
   let [currentUser, setCurrentUser] = useContext(UserContext);
@@ -58,7 +59,7 @@ const ProfilePage = () => {
               name="email"
               control={control}
               disabled={
-                currentUser.provider === currentUser.cinemaPlus ? false : true
+                currentUser.provider === userProvider.cinemaPlus ? false : true
               }
             ></Input>
           </Field>
@@ -72,7 +73,7 @@ const ProfilePage = () => {
               name="password"
               control={control}
               disabled={
-                currentUser.provider === currentUser.cinemaPlus ? false : true
+                currentUser.provider === userProvider.cinemaPlus ? false : true
               }
             ></Input>
           </Field>

@@ -8,6 +8,7 @@ const UserProvider = (props) => {
   const [users, setUsers] = useState([]);
   const [history, setHistory] = useState([]);
   const [itemPerPage, setItemPerPage] = useState(0);
+  const [movieListHistory, setMovieListHistory] = useState([]);
   const value = [
     currentUser,
     setCurrentUser,
@@ -17,6 +18,8 @@ const UserProvider = (props) => {
     setHistory,
     itemPerPage,
     setItemPerPage,
+    movieListHistory,
+    setMovieListHistory,
   ];
   return <UserContext.Provider value={value} {...props}></UserContext.Provider>;
 };

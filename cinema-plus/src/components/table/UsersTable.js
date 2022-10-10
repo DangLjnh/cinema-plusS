@@ -52,6 +52,7 @@ const UsersTable = () => {
   const itemsPerPage = 8;
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  console.log("🚀 ~ file: UsersTable.js ~ line 55 ~ UsersTable ~ users", users);
   const [itemPrevPage, setItemPrevPage] = useState(0);
   const [itemAfterPage, setItemAfterPage] = useState(8);
   const [pageCount, setPageCount] = useState(0);
@@ -158,7 +159,7 @@ const UsersTable = () => {
         <td title={user.id}>{user?.uid}</td>
         <td className="flex items-center gap-x-3">
           <img
-            src={user.avatar || "/user.png"}
+            src={user.photoURL || "/user.png"}
             alt=""
             className="flex-shrink-0 object-cover w-10 h-10 rounded-full"
           />
