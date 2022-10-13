@@ -19,7 +19,7 @@ const Author = () => {
       {currentUser.role === 1 && (
         <Button
           className={"text-white"}
-          onClick={() => navigate("/manage-user")}
+          onClick={() => navigate("/manage/user")}
         >
           Manage user
         </Button>

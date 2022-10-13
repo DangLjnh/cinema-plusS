@@ -31,8 +31,10 @@ import UserUpdate from "components/user/UserUpdate";
 import UserCreate from "components/user/UserCreate";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
+import DashboardPage from "pages/DashboardPage";
 const App = () => {
   let [currentUser, setCurrentUser] = useContext(UserContext);
+  console.log("🚀 ~ file: App.js ~ line 36 ~ App ~ currentUser", currentUser);
   const cld = new Cloudinary({
     cloud: {
       cloudName: "dwkckmmr7",
@@ -96,18 +98,19 @@ const App = () => {
         </Route>
         <Route element={<LayoutDetail columnRight></LayoutDetail>}>
           <Route
-            path="/manage-user"
+            path="/manage/user"
             element={<ManageUserPage category={tmdbAPI}></ManageUserPage>}
           ></Route>
           <Route
-            path="/manage-user/update-user/:userID"
+            path="/manage/user/update-user/:userID"
             element={<UserUpdate category={tmdbAPI}></UserUpdate>}
           ></Route>
           <Route
-            path="/manage-user/create-user"
+            path="/manage/user/create-user"
             element={<UserCreate category={tmdbAPI}></UserCreate>}
           ></Route>
         </Route>
+        <Route element={<DashboardPage></DashboardPage>}></Route>
         <Route element={<LayoutDetailTv></LayoutDetailTv>}>
           <Route
             path="/tvshow/:tvID/watch"

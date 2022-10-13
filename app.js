@@ -66,7 +66,6 @@ app.post("/get/userItem", (req, res) => {
 //POST
 app.post("/post/user", (req, resp) => {
   let data = {
-    // uid: req.body.uid,
     displayName: req.body.displayName,
     email: req.body.email,
     password: req.body.password || null,
@@ -77,6 +76,7 @@ app.post("/post/user", (req, resp) => {
   };
   db.query("INSERT INTO users SET ?", data, function (err, result) {
     // if (err) throw err;
+    console.log(result);
     resp.send(result);
   });
 });
@@ -87,16 +87,34 @@ app.post("/post/currentUser", (req, resp) => {
     email: req.body.email,
     password: req.body.password,
     photoURL: req.body.photoURL,
+    publicID: req.body.publicID,
     role: req.body.role,
     status: req.body.status,
     provider: req.body.provider,
   };
   db.query("INSERT INTO currentuser SET ?", data, function (err, result) {
     if (err) throw err;
+    console.log(result);
     resp.send(result);
   });
 });
+app.post("/post/update/currentUser", (req, resp) => {
+  const uid = req.body.uid;
+  let data = {
+    photoURL: req.body.photoURL,
+    publicID: req.body.publicID,
+  };
+  db.query(
+    `UPDATE currentuser SET ? WHERE uid = ${uid}`,
+    data,
+    function (err, result) {
+      if (err) throw err;
+      resp.send(result);
+    }
+  );
+});
 app.post("/post/updateUser", (req, resp) => {
+  console.log(req.body);
   let data = {
     displayName: req.body.displayName,
     email: req.body.email,
@@ -166,6 +184,39 @@ app.post("/upload", (req, res) => {
   );
   streamifier.createReadStream(file.data).pipe(cld_upload_stream);
 });
+app.post("/upload/currentUser", (req, res) => {
+  const uid = req.body.uid;
+  const file = req.files.file;
+  let cld_upload_stream = cloudinary.uploader.upload_stream(
+    {
+      folder: "image-users",
+    },
+    function (error, result) {
+      let data = {
+        photoURL: result.url,
+        publicID: result.public_id,
+      };
+      db.query(
+        `UPDATE currentuser SET ? WHERE uid = ${uid}`,
+        data,
+        function (err, results) {
+          if (err) throw err;
+          console.log(results);
+          res.send(results);
+        }
+      );
+      db.query(
+        `UPDATE users SET ? WHERE uid = ${uid}`,
+        data,
+        function (err, results) {
+          if (err) throw err;
+          console.log(results);
+        }
+      );
+    }
+  );
+  streamifier.createReadStream(file.data).pipe(cld_upload_stream);
+});
 //DELETE
 app.post("/delete/currentUser", (req, resp) => {
   const { email } = req?.body;
@@ -183,6 +234,29 @@ app.post("/delete/user/:userID", (req, resp) => {
       console.log(err);
     }
   });
+});
+app.post("/delete/currentUser/image", (req, resp) => {
+  const uid = req.body.uid;
+  cloudinary.uploader
+    .destroy(req.body.publicID, function (error, result) {
+      console.log(result, error);
+    })
+    .then((res) => {
+      if (res) {
+        let data = {
+          photoURL: "",
+          publicID: "",
+        };
+        db.query(
+          `UPDATE currentuser SET ? WHERE uid = ${uid}`,
+          data,
+          function (err, results) {
+            if (err) throw err;
+            resp.send(results);
+          }
+        );
+      }
+    });
 });
 app.post("/delete/image", (req, resp) => {
   const uid = req.body.uid;

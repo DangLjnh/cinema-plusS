@@ -119,7 +119,7 @@ const NotFoundPage = ({
       <NotFoundPageStyle
         className={`flex flex-col items-center justify-center tracking-wide text-white ${className}`}
       >
-        <img srcSet={`../../404-logo-2.png ${sizeImg}`} alt="" />
+        <img srcSet={`../../../404-logo-2.png ${sizeImg}`} alt="" />
         <h2 className={`pb-5 my-5 text-2xl title-not-found ${classNameTitle}`}>
           {title}
         </h2>

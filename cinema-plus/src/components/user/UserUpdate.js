@@ -24,6 +24,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 const UserUpdate = () => {
   const [loading, setLoading] = useState(false);
   const [loadingImg, setLoadingImg] = useState(false);
+  const [checkUpdate, setCheckUpdate] = useState(false);
   const [users, setUsers] = useState([]);
   const { userID } = useParams();
   const [selectedFile, setSelectedFile] = useState();
@@ -79,7 +80,7 @@ const UserUpdate = () => {
     },
   });
   const handleReturnManage = () => {
-    if (userDetail.photoURL) {
+    if (userDetail.photoURL && checkUpdate === true) {
       setLoadingImg(true);
       axios
         .post(`${clientSide}/delete/image`, {
@@ -118,6 +119,7 @@ const UserUpdate = () => {
   };
   const handleUploadImage = (e) => {
     setLoadingImg(true);
+    setCheckUpdate(true);
     const formData = new FormData();
     formData.append("uid", userDetail.uid);
     formData.append("file", e.target.files[0]);
@@ -131,14 +133,12 @@ const UserUpdate = () => {
             setLoadingImg(false);
             setUserDetail(Object.assign({}, ...res.data));
           });
-        // toast.success("Update user successfully!");
-        // setLoading(false);
-        // navigate("/manage-user");
       }
     });
   };
   const handleUpdateUser = (values) => {
     setLoading(true);
+    setCheckUpdate(true);
     // const formData = new FormData();
     // formData.append("uid", values.uid);
     // formData.append("file", values.file[0]);

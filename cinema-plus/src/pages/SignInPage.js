@@ -113,18 +113,14 @@ const SignInPage = () => {
           displayName: currentUser.displayName,
           email: values.email,
           password: values.password,
-          photoURL: "",
-          // createdAt: dateCurrent,
+          photoURL: currentUser.photoURL,
+          publicID: currentUser.publicID,
           role: currentUser.role,
           status: currentUser.status,
           provider: currentUser.provider,
         })
         .then((res) => {
           if (res) {
-            console.log(
-              "🚀 ~ file: SignInPage.js ~ line 123 ~ .then ~ res",
-              res
-            );
             setCurrentUser(currentUser);
             setIsSubmitting(false);
             toast.success("Login sucessfull");
@@ -178,6 +174,11 @@ const SignInPage = () => {
                 Sign up
               </NavLink>
             </p>
+            <div>
+              <p className="my-2 text-center text-white">Account admin</p>
+              <p>Email: dangthanhnhatlinh@gmail.com</p>
+              <p>Password: 12345678</p>
+            </div>
           </div>
         </LayoutSignInOut>
       </SignInPageStyle>

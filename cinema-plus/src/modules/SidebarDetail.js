@@ -215,7 +215,7 @@ const SidebarDetail = ({ className }) => {
       <div className="fixed mt-[5%] w-[50px] flex flex-col items-center">
         <div className="flex items-center text-lg text-white mt-[-40px] image-logo mb-20">
           <NavLink to="/">
-            <img src="../../cp-min.png" alt="" className="w-12 h-9" />
+            <img src="../../../cp-min.png" alt="" className="w-12 h-9" />
           </NavLink>
         </div>
         {sidebarLitst.map((item) => {

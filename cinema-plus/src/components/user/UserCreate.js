@@ -27,6 +27,7 @@ const schema = yup.object({
 const UserCreate = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
   const {
     control, //mac dinh
     handleSubmit, //sử dụng để lấy value
@@ -60,6 +61,7 @@ const UserCreate = () => {
     });
   }, []);
   const handleCreateUser = (values) => {
+    setLoading(true);
     const result = users?.filter((user) => {
       return (
         values?.email === user.email &&
@@ -70,24 +72,37 @@ const UserCreate = () => {
       toast.error("Email already exist");
       return;
     } else {
-      axios.post(`${clientSide}/post/user`, {
-        displayName: values.displayName,
-        email: values.email,
-        password: values.password,
-        photoURL: "",
-        role: values.role,
-        status: values.status,
-        provider: userProvider.cinemaPlus,
-      });
-      toast.success("Create user successful");
-      reset({
-        displayName: "",
-        email: "",
-        password: "",
-        photoURL: "",
-        role: userRole.user,
-        status: userStatus.active,
-      });
+      axios
+        .post(`${clientSide}/post/user`, {
+          displayName: values.displayName,
+          email: values.email,
+          password: values.password,
+          photoURL: "",
+          role: values.role,
+          status: values.status,
+          provider: userProvider.cinemaPlus,
+        })
+        .then((res) => {
+          const uid = res.data.insertId;
+          const formData = new FormData();
+          formData.append("uid", uid);
+          formData.append("file", values.file[0]);
+          axios.post("http://localhost:3000/upload", formData).then((res) => {
+            if (res) {
+              axios
+                .post(`${serverSide}/get/userItem`, {
+                  uid: uid,
+                })
+                .then((res) => {
+                  if (res) {
+                    setLoading(false);
+                    toast.success("Create user successful");
+                    reset();
+                  }
+                });
+            }
+          });
+        });
     }
   };
   return (
@@ -106,16 +121,17 @@ const UserCreate = () => {
         </Button>
       </div>
       <form onSubmit={handleSubmit(handleCreateUser)}>
-        <div className="rounded-full mx-auto w-[200px] h-[200px] mb-10">
-          <label
+        <div className="rounded-full mx-auto w-[200px] mb-10">
+          <input
+            type="file"
+            // className="hidden-input"
+            name="photoURL"
+            {...register("file")}
+            // {...rest}
+          />
+          {/* <label
             className={`cursor-pointer flex items-center justify-center bg-gray-100 border border-dashed w-full min-h-[200px] relative overflow-hidden group h-full !rounded-full`}
           >
-            <input
-              type="file"
-              className="hidden-input"
-              {...register("file")}
-              // {...rest}
-            />
             {
               <div className="flex flex-col items-center text-center pointer-events-none">
                 <img
@@ -126,32 +142,36 @@ const UserCreate = () => {
                 <p className="font-semibold">Choose photo</p>
               </div>
             }
-            {/* {image && (
-        <Fragment>
-          <img src={image} className="object-cover w-full h-full" alt="" />
-          <button
-            type="button"
-            className="absolute z-10 flex items-center justify-center invisible w-16 h-16 text-red-500 transition-all bg-white rounded-full opacity-0 cursor-pointer group-hover:opacity-100 group-hover:visible"
-            onClick={handleDeleteImage}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
-          </button>
-        </Fragment>
-      )} */}
-          </label>
+            {image && (
+              <Fragment>
+                <img
+                  src={image}
+                  className="object-cover w-full h-full"
+                  alt=""
+                />
+                <button
+                  type="button"
+                  className="absolute z-10 flex items-center justify-center invisible w-16 h-16 text-red-500 transition-all bg-white rounded-full opacity-0 cursor-pointer group-hover:opacity-100 group-hover:visible"
+                  onClick={handleDeleteImage}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+              </Fragment>
+            )}
+          </label> */}
         </div>
         <div className=" form-layout">
           <Field>
@@ -238,8 +258,8 @@ const UserCreate = () => {
           <Button
             type="submit"
             className={"text-white w-[148px] h-[48px]"}
-            // isLoading={loading}
-            // disabled={loading}
+            isLoading={loading}
+            disabled={loading}
           >
             Create User
           </Button>

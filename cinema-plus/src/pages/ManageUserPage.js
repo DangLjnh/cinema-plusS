@@ -17,7 +17,7 @@ const ManageUserPage = () => {
         <Button
           className={"text-white h-[48px]"}
           onClick={() => {
-            navigate("/manage-user/create-user");
+            navigate("/manage/user/create-user");
           }}
         >
           Create user

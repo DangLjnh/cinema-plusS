@@ -61,7 +61,7 @@ const ButtonFB = () => {
             .post(`${clientSide}/post/user`, {
               displayName: user.displayName,
               email: user.email,
-              photoURL: "",
+              photoURL: user.photoURL,
               role: userRole.user,
               status: userStatus.active,
               provider: userProvider.facebook,
