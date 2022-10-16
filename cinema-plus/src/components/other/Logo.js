@@ -7,7 +7,7 @@ const Logo = ({ className }) => {
       className={`flex items-center text-lg text-white image-logo gap-x-3 ${className}`}
     >
       <NavLink to="/">
-        <img srcSet="../cp-min.png" alt="" className="w-12 h-9" />
+        <img srcSet="../../../cp-min.png" alt="" className="w-12 h-9" />
       </NavLink>
       <NavLink to="/">
         <div className="flex">

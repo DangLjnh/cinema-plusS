@@ -62,6 +62,27 @@ app.post("/get/userItem", (req, res) => {
     res.send(result);
   });
 });
+app.get("/get/categories", (req, res) => {
+  db.query("SELECT * FROM categories", (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+    res.send(result);
+  });
+});
+app.post("/get/categoryItem", (req, res) => {
+  const { categoryID } = req.body;
+  console.log(categoryID);
+  db.query(
+    `SELECT * FROM categories where categoryID=${categoryID}`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
+    }
+  );
+});
 
 //POST
 app.post("/post/user", (req, resp) => {
@@ -133,31 +154,33 @@ app.post("/post/updateUser", (req, resp) => {
     }
   );
 });
-app.post("/post/bookmark/:movieID", (req, resp) => {
-  // console.log(req.body);
-  resp.send(req.body);
-  // let data = {
-  //   uid: req.body.uid,
-  //   displayName: req.body.displayName,
-  //   email: req.body.email,
-  //   filmID: req.body.filmID,
-  // };
-  // db.query("INSERT INTO bookmark SET ?", data, function (err, result) {
-  //   if (err) throw err;
-  //   resp.send(result);
-  // });
+app.post("/post/category", (req, resp) => {
+  let data = {
+    name: req.body.name,
+    slug: req.body.slug,
+    status: req.body.status,
+  };
+  db.query("INSERT INTO categories SET ?", data, function (err, result) {
+    // if (err) throw err;
+    console.log(result);
+    resp.send(result);
+  });
 });
-app.post("/post/bookmark/list/:movieID", (req, resp) => {
-  // console.log(req.body.uid);
-  // let uid = req.body.uid;
-  // let filmID = req.body.filmID;
-  // db.query(
-  //   `UPDATE bookmark SET filmID='${filmID}' WHERE uid=${uid}`,
-  //   function (err, result) {
-  //     if (err) throw err;
-  //     resp.send(result);
-  //   }
-  // );
+app.post("/post/updateCategory", (req, resp) => {
+  let data = {
+    name: req.body.name,
+    slug: req.body.slug,
+    status: req.body.status,
+  };
+  let categoryID = req.body.categoryID;
+  db.query(
+    `UPDATE categories SET ? WHERE categoryID = ${categoryID}`,
+    data,
+    function (err, result) {
+      if (err) throw err;
+      resp.send(result);
+    }
+  );
 });
 app.post("/upload", (req, res) => {
   const uid = req.body.uid;
@@ -280,5 +303,17 @@ app.post("/delete/image", (req, resp) => {
         );
       }
     });
+});
+app.post("/delete/category/:categoryID", (req, resp) => {
+  const { categoryID } = req?.body;
+  db.query(
+    `DELETE FROM categories WHERE categoryID=${categoryID}`,
+    (err, result) => {
+      resp.send(result);
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
 });
 app.listen(port, console.log(`Server started on port ${port}`));

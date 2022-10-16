@@ -42,11 +42,11 @@ const UserUpdate = () => {
   });
   useEffect(() => {
     axios
-      .post(`${serverSide}/get/userItem`, {
+      .post(`${clientSide}/get/userItem`, {
         uid: userID,
       })
       .then((res) => setUserDetail(Object.assign({}, ...res.data)));
-    axios.get(`${serverSide}/get/users`).then((response) => {
+    axios.get(`${clientSide}/get/users`).then((response) => {
       setUsers(response.data);
     });
     window.scrollTo(0, 0);
@@ -90,11 +90,11 @@ const UserUpdate = () => {
         .then((res) => {
           if (res) {
             setLoadingImg(false);
-            navigate("/manage-user");
+            navigate("/manage/user");
           }
         });
     } else {
-      navigate("/manage-user");
+      navigate("/manage/user");
     }
   };
   const handleDeleteImage = () => {
@@ -123,7 +123,7 @@ const UserUpdate = () => {
     const formData = new FormData();
     formData.append("uid", userDetail.uid);
     formData.append("file", e.target.files[0]);
-    axios.post("http://localhost:3000/upload", formData).then((res) => {
+    axios.post(`${clientSide}/upload`, formData).then((res) => {
       if (res) {
         axios
           .post(`${serverSide}/get/userItem`, {
@@ -164,19 +164,7 @@ const UserUpdate = () => {
           if (res) {
             toast.success("Update user successfully!");
             setLoading(false);
-            navigate("/manage-user");
-            // if (values?.file[0] || userDetail.photoURL) {
-            //   axios
-            //     .post("http://localhost:3000/upload", formData)
-            //     .then((res) => {
-            //       if (res) {
-            //         toast.success("Update user successfully!");
-            //         setLoading(false);
-            //         navigate("/manage-user");
-            //       }
-            //     });
-            // } else {
-            // }
+            navigate("/manage/user");
           }
         });
     }

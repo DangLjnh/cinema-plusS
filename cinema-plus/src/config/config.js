@@ -12,7 +12,7 @@ const tmdbAPI = {
   getMovieList: (type, page = 1) =>
     `${tmdbEndpoint}/${type}?api_key=${apiKey}&page=${page}`,
   getTrendingMovie: `https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}`,
-  getTrendingAll: `https://api.themoviedb.org/3/trending/all/week?api_key=${apiKey}`,
+  getTrendingAll: `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}`,
   getMovieGenre: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}`,
   imageOriginal: (url) => `https://image.tmdb.org/t/p/original${url}`,
   getMovieListGenre: `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`,
@@ -35,6 +35,7 @@ const tvAPI = {
   getTvList: (type, page = 1) =>
     `${tvEndpoint}/${type}?api_key=${apiKey}&page=${page}`,
   getTrendingTv: `https://api.themoviedb.org/3/trending/tv/day?api_key=${apiKey}`,
+  getTrendingAll: `https://api.themoviedb.org/3/trending/tv/week?api_key=${apiKey}`,
   getTvListGenre: `https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}`,
   getTVDetail: (tvID) => `${tvEndpoint}/${tvID}?api_key=${apiKey}`,
   getTVMeta: (tvID, type) => `${tvEndpoint}/${tvID}/${type}?api_key=${apiKey}`,

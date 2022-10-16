@@ -1,33 +1,32 @@
 import Button from "components/button/Button";
-import UsersTable from "components/table/UsersTable";
+import CategoriesTable from "components/table/CategoriesTable";
 import ManageUserTitle from "components/title/ManageUserTitle";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const ManageUserPage = () => {
+const ManageCategoriesPage = () => {
   const navigate = useNavigate();
   return (
-    <>
+    <div>
       <div className="flex items-start justify-between">
         <ManageUserTitle
-          title="Users"
-          desc="Here you can manage your user."
-          desc2="If user signed in Google or Facebook, you can't change email and password."
+          title="Categories"
+          desc="Here you can manage your category."
         ></ManageUserTitle>
         <Button
           className={"text-white h-[48px]"}
           onClick={() => {
-            navigate("/manage/user/create-user");
+            navigate("/manage/categories/create-category");
           }}
         >
-          Create user
+          Create category
         </Button>
       </div>
       <div className="mb-10">
-        <UsersTable></UsersTable>
+        <CategoriesTable></CategoriesTable>
       </div>
-    </>
+    </div>
   );
 };
 
-export default ManageUserPage;
+export default ManageCategoriesPage;

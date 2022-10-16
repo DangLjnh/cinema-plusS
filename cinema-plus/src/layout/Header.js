@@ -114,7 +114,7 @@ const Header = ({ page, className }) => {
   };
   return (
     <HeaderStyle
-      className={` top-0 grid w-full grid-cols-3 py-8 layout bg-bgDark header ${className}`}
+      className={`top-0 grid w-full grid-cols-3 py-8 layout bg-bgDark header ${className}`}
     >
       <Logo></Logo>
       <span className="toggleBar" onClick={handleToogleBar}>
@@ -152,7 +152,7 @@ const Header = ({ page, className }) => {
             );
           })}
         </div>
-        <Author></Author>
+        <Author dashboard={true} manageUser={false}></Author>
       </div>
       {page === "discovery" && <Search className={"search-header"}></Search>}
     </HeaderStyle>

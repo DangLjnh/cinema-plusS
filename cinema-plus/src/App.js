@@ -32,9 +32,14 @@ import UserCreate from "components/user/UserCreate";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import DashboardPage from "pages/DashboardPage";
+import LayoutDashboard from "layout/LayoutDashboard";
+import LayoutBlog from "layout/LayoutBlog";
+import BlogPage from "components/blog/BlogPage";
+import ManageCategoriesPage from "pages/ManageCategoriesPage";
+import BlogCategoriesCreate from "components/categories/BlogCategoriesCreate";
+import BlogCategoriesUpdate from "components/categories/BlogCategoriesUpdate";
 const App = () => {
   let [currentUser, setCurrentUser] = useContext(UserContext);
-  console.log("🚀 ~ file: App.js ~ line 36 ~ App ~ currentUser", currentUser);
   const cld = new Cloudinary({
     cloud: {
       cloudName: "dwkckmmr7",
@@ -96,21 +101,44 @@ const App = () => {
             element={<WatchMoviePage category={tmdbAPI}></WatchMoviePage>}
           ></Route>
         </Route>
-        <Route element={<LayoutDetail columnRight></LayoutDetail>}>
+        {/* <Route element={<LayoutDetail columnRight></LayoutDetail>}></Route> */}
+        <Route element={<LayoutDashboard></LayoutDashboard>}>
+          <Route
+            path="/dashboard"
+            element={<DashboardPage></DashboardPage>}
+          ></Route>
           <Route
             path="/manage/user"
-            element={<ManageUserPage category={tmdbAPI}></ManageUserPage>}
+            element={<ManageUserPage></ManageUserPage>}
           ></Route>
           <Route
             path="/manage/user/update-user/:userID"
-            element={<UserUpdate category={tmdbAPI}></UserUpdate>}
+            element={<UserUpdate></UserUpdate>}
           ></Route>
           <Route
             path="/manage/user/create-user"
-            element={<UserCreate category={tmdbAPI}></UserCreate>}
+            element={<UserCreate></UserCreate>}
+          ></Route>
+          <Route
+            path="/manage/categories"
+            element={<ManageCategoriesPage></ManageCategoriesPage>}
+          ></Route>
+          <Route
+            path="/manage/categories/create-category"
+            element={<BlogCategoriesCreate></BlogCategoriesCreate>}
+          ></Route>
+          <Route
+            path="/manage/categories/update-category/:categoryID"
+            element={<BlogCategoriesUpdate></BlogCategoriesUpdate>}
+          ></Route>
+          <Route
+            path="/manage/post"
+            element={<ManageCategoriesPage></ManageCategoriesPage>}
           ></Route>
         </Route>
-        <Route element={<DashboardPage></DashboardPage>}></Route>
+        <Route element={<LayoutBlog></LayoutBlog>}>
+          <Route path="/blog" element={<BlogPage></BlogPage>}></Route>
+        </Route>
         <Route element={<LayoutDetailTv></LayoutDetailTv>}>
           <Route
             path="/tvshow/:tvID/watch"

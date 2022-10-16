@@ -20,5 +20,10 @@ export const userProvider = {
   google: 2,
   facebook: 3,
 };
+export const status = {
+  approve: 1,
+  pending: 2,
+  reject: 3,
+};
 export const customScroll = {};
 //api key free in imgbb to use upload image detailt

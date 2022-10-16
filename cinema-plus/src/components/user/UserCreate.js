@@ -115,7 +115,7 @@ const UserCreate = () => {
         ></ManageUserTitle>
         <Button
           className={"text-white h-[48px]"}
-          onClick={() => navigate("/manage-user")}
+          onClick={() => navigate("/manage/user")}
         >
           Return manage user
         </Button>
@@ -173,7 +173,7 @@ const UserCreate = () => {
             )}
           </label> */}
         </div>
-        <div className=" form-layout">
+        <div className="form-layout">
           <Field>
             <p className="mb-3 text-[17px] text-white">Display name</p>
             <Input

@@ -94,14 +94,22 @@ const SidebarItemStyle = styled.div`
     }
   }
 `;
-const SidebarItem = ({ sidebarList, title }) => {
+const SidebarItem = ({
+  sidebarList,
+  title,
+  hasTitle = true,
+  classNameTitle,
+  classNameItem,
+}) => {
   let [currentUser, setCurrentUser] = useContext(UserContext);
   const navigate = useNavigate();
   const user = auth.currentUser;
   if (!sidebarList) return null;
   return (
     <SidebarItemStyle className="menu ">
-      <h2 className="text-base font-semibold mb-7 sidebar-title">{title}</h2>
+      {hasTitle && (
+        <h2 className="text-base font-semibold mb-7 sidebar-title">{title}</h2>
+      )}
       {sidebarList.map((item) => {
         if (
           item.title === "Log out" &&
@@ -140,10 +148,12 @@ const SidebarItem = ({ sidebarList, title }) => {
             }}
           >
             <div
-              className={`relative flex items-center h-full mb-[25px] text-[15px] menu-item gap-x-3 sidebar-item hover:text-blueLight`}
+              className={`relative flex items-center h-full mb-[25px] text-[15px] menu-item gap-x-3 sidebar-item hover:text-blueLight ${classNameItem}`}
             >
               <span className={`p-1 sidebar-icon`}>{item.icon}</span>
-              <span className="sidebar-item-title">{item.title}</span>
+              <span className={`sidebar-item-title  ${classNameTitle}`}>
+                {item.title}
+              </span>
             </div>
           </NavLink>
         );

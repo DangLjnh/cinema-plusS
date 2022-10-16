@@ -48,11 +48,10 @@ const UserTableStyle = styled.div`
     }
   }
 `;
-const UsersTable = () => {
+const UsersTable = ({ className }) => {
   const itemsPerPage = 8;
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  console.log("🚀 ~ file: UsersTable.js ~ line 55 ~ UsersTable ~ users", users);
   const [itemPrevPage, setItemPrevPage] = useState(0);
   const [itemAfterPage, setItemAfterPage] = useState(8);
   const [pageCount, setPageCount] = useState(0);
@@ -92,7 +91,7 @@ const UsersTable = () => {
           })
           .then((res) => {
             if (res) {
-              axios.get(`${serverSide}/get/users`).then((response) => {
+              axios.get(`${clientSide}/get/users`).then((response) => {
                 setUsers(response.data);
               });
             }
@@ -197,7 +196,7 @@ const UsersTable = () => {
     window.scrollTo(0, 0);
   };
   return (
-    <UserTableStyle>
+    <UserTableStyle className={className}>
       <Table>
         <thead>
           <tr>
@@ -207,7 +206,7 @@ const UsersTable = () => {
             <th>Status</th>
             <th>Role</th>
             <th>Provider</th>
-            <th className="bg-">Action</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>

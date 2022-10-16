@@ -11,20 +11,19 @@ const AuthorStyled = styled.div`
     }
   }
 `;
-const Author = () => {
+const Author = ({ manageUser = true, dashboard = false }) => {
   const navigate = useNavigate();
   let [currentUser, setCurrentUser] = useContext(UserContext);
   return (
     <>
-      {currentUser.role === 1 && (
+      {currentUser.role === 1 && dashboard && (
         <Button
-          className={"text-white"}
-          onClick={() => navigate("/manage/user")}
+          className={"text-white h-[48px]"}
+          onClick={() => navigate("/dashboard")}
         >
-          Manage user
+          Dashboard
         </Button>
       )}
-
       {currentUser &&
         Object.keys(currentUser).length === 0 &&
         Object.getPrototypeOf(currentUser) === Object.prototype && (
