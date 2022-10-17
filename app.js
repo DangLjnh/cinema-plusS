@@ -83,7 +83,23 @@ app.post("/get/categoryItem", (req, res) => {
     }
   );
 });
-
+app.get("/get/posts", (req, res) => {
+  db.query("SELECT * FROM posts", (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+    res.send(result);
+  });
+});
+app.post("/get/postItem", (req, res) => {
+  const { postID } = req.body;
+  db.query(`SELECT * FROM posts where postID=${postID}`, (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+    res.send(result);
+  });
+});
 //POST
 app.post("/post/user", (req, resp) => {
   let data = {
@@ -182,6 +198,25 @@ app.post("/post/updateCategory", (req, resp) => {
     }
   );
 });
+app.post("/post/post", (req, resp) => {
+  console.log(req.body);
+  let data = {
+    uid: req.body.uid,
+    nameAuthor: req.body.nameAuthor,
+    title: req.body.title,
+    slug: req.body.slug,
+    categoryName: req.body.categoryName,
+    photoURL: req.body.photoURL,
+    publicID: req.body.publicID,
+    hot: req.body.hot,
+    status: req.body.status,
+    content: req.body.content,
+  };
+  db.query("INSERT INTO posts SET ?", data, function (err, result) {
+    resp.send(result);
+    console.log(err);
+  });
+});
 app.post("/upload", (req, res) => {
   const uid = req.body.uid;
   const file = req.files.file;
@@ -234,6 +269,31 @@ app.post("/upload/currentUser", (req, res) => {
         function (err, results) {
           if (err) throw err;
           console.log(results);
+        }
+      );
+    }
+  );
+  streamifier.createReadStream(file.data).pipe(cld_upload_stream);
+});
+app.post("/upload/post", (req, res) => {
+  const postID = req.body.postID;
+  const file = req.files.file;
+  let cld_upload_stream = cloudinary.uploader.upload_stream(
+    {
+      folder: "image-posts",
+    },
+    function (error, result) {
+      let data = {
+        photoURL: result.url,
+        publicID: result.public_id,
+      };
+      db.query(
+        `UPDATE posts SET ? WHERE postID  = ${postID}`,
+        data,
+        function (err, results) {
+          if (err) throw err;
+          console.log(results);
+          res.send(results);
         }
       );
     }

@@ -26,24 +26,33 @@ const LayoutBlogStyle = styled.div`
 `;
 const LayoutBlog = () => {
   return (
-    <LayoutBlogStyle>
-      <Header page="home" className=" header-detail"></Header>
-      <div className="flex justify-between my-10 header-dashboard">
-        <Logo className={"w-[180px] "}></Logo>
-        <div className="flex items-center gap-x-5">
-          <p className="text-white">Movie</p>
-          <p className="">Tv show</p>
+    <>
+      <LayoutBlogStyle>
+        <Header page="home" className=" header-detail"></Header>
+        <div className="flex justify-between my-10 header-dashboard">
+          <Logo className={"w-[180px] "}></Logo>
+          <div className="flex items-center gap-x-5">
+            <p className="text-white">Movie</p>
+            <p className="">Tv show</p>
+          </div>
+          <div className="flex items-center justify-end gap-x-5">
+            <Author></Author>
+          </div>
         </div>
-        <div className="flex items-center justify-end gap-x-5">
-          <Author></Author>
+        <div className="layout-main-detail">
+          <div className="layout-children">
+            <Outlet></Outlet>
+          </div>
+        </div>
+      </LayoutBlogStyle>
+      <div className="mt-10 h-[20px] p-5 text-white -mx-5 bg-neutral-600 flex justify-between items-center">
+        <p>Copyright Dang Linh © 19/7/2022</p>
+        <div className="flex items-center gap-x-3">
+          <p>facebook</p>
+          <p>ithub</p>
         </div>
       </div>
-      <div className="layout-main-detail">
-        <div className="layout-children">
-          <Outlet></Outlet>
-        </div>
-      </div>
-    </LayoutBlogStyle>
+    </>
   );
 };
 

@@ -26,7 +26,6 @@ import SignUpPage from "pages/SignUpPage";
 import axios from "axios";
 import { useContext } from "react";
 import { UserContext } from "contexts/UserProvider";
-import ManageUserPage from "pages/ManageUserPage";
 import UserUpdate from "components/user/UserUpdate";
 import UserCreate from "components/user/UserCreate";
 import { AdvancedImage } from "@cloudinary/react";
@@ -35,9 +34,14 @@ import DashboardPage from "pages/DashboardPage";
 import LayoutDashboard from "layout/LayoutDashboard";
 import LayoutBlog from "layout/LayoutBlog";
 import BlogPage from "components/blog/BlogPage";
-import ManageCategoriesPage from "pages/ManageCategoriesPage";
 import BlogCategoriesCreate from "components/categories/BlogCategoriesCreate";
 import BlogCategoriesUpdate from "components/categories/BlogCategoriesUpdate";
+import ManageUserPage from "components/manage/ManageUserPage";
+import ManageCategoriesPage from "components/manage/ManageCategoriesPage";
+import ManagePostPage from "components/manage/ManagePostPage";
+import PostCreate from "components/post/PostCreate";
+import PostUpdate from "components/post/PostUpdate";
+import BlogDetailPage from "components/blog/BlogDetailPage";
 const App = () => {
   let [currentUser, setCurrentUser] = useContext(UserContext);
   const cld = new Cloudinary({
@@ -133,11 +137,23 @@ const App = () => {
           ></Route>
           <Route
             path="/manage/post"
-            element={<ManageCategoriesPage></ManageCategoriesPage>}
+            element={<ManagePostPage></ManagePostPage>}
+          ></Route>
+          <Route
+            path="/manage/post/create-post"
+            element={<PostCreate></PostCreate>}
+          ></Route>
+          <Route
+            path="/manage/post/update-post/:postID"
+            element={<PostUpdate></PostUpdate>}
           ></Route>
         </Route>
         <Route element={<LayoutBlog></LayoutBlog>}>
           <Route path="/blog" element={<BlogPage></BlogPage>}></Route>
+          <Route
+            path="/blog/post/:slug/:postID"
+            element={<BlogDetailPage></BlogDetailPage>}
+          ></Route>
         </Route>
         <Route element={<LayoutDetailTv></LayoutDetailTv>}>
           <Route

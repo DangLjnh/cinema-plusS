@@ -10,7 +10,7 @@ const ManageCategoriesPage = () => {
     <div>
       <div className="flex items-start justify-between">
         <ManageUserTitle
-          title="Categories"
+          title="Manage categories"
           desc="Here you can manage your category."
         ></ManageUserTitle>
         <Button

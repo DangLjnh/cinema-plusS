@@ -26,4 +26,5 @@ export const status = {
   reject: 3,
 };
 export const customScroll = {};
-//api key free in imgbb to use upload image detailt
+export const imgbbAPI =
+  "https://api.imgbb.com/1/upload?key=8c6562419aad39522a13d6c6dcc52351";

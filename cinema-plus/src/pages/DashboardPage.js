@@ -8,6 +8,10 @@ import { v4 } from "uuid";
 import Table from "components/table/Table";
 import ActionEdit from "components/action/ActionEdit";
 import ActionDelete from "components/action/ActionDelete";
+import { useState } from "react";
+import { clientSide } from "config/config";
+import axios from "axios";
+import { useEffect } from "react";
 const DashboardPageStyle = styled.div`
   .grid-table {
     grid-template-columns: 2fr 1fr;
@@ -30,11 +34,25 @@ const DashboardPageStyle = styled.div`
   }
 `;
 const DashboardPage = () => {
+  const [users, setUsers] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    axios.get(`${clientSide}/get/users`).then((response) => {
+      setUsers(response.data);
+    });
+    axios.get(`${clientSide}/get/categories`).then((response) => {
+      setCategories(response.data);
+    });
+    axios.get(`${clientSide}/get/posts`).then((response) => {
+      setPosts(response.data);
+    });
+  }, []);
   const dashboardList = [
     {
       id: 11,
       bgColor: "bg-sky-200",
-      number: 54,
+      number: users.length,
       title: "Users",
       icon: (
         <svg
@@ -90,7 +108,7 @@ const DashboardPage = () => {
     {
       id: 12,
       bgColor: "bg-[#a6f4d0]",
-      number: 12,
+      number: posts.length,
       title: "Posts",
       // #218c74s #8e44ad #e9d5ff
       icon: (
@@ -109,7 +127,7 @@ const DashboardPage = () => {
     {
       id: 13,
       bgColor: "bg-[#ffcccc]",
-      number: 20,
+      number: categories.length,
       title: "Categories",
       // #218c74s #8e44ad #e9d5ff
       icon: (
@@ -132,7 +150,7 @@ const DashboardPage = () => {
     {
       id: 15,
       bgColor: "bg-[#eac392]",
-      number: 32861,
+      number: `~954.414`,
       title: "Films",
       icon: (
         <svg

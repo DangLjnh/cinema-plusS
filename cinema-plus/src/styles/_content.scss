@@ -1,5 +1,4 @@
 .entry-content .ql-snow .ql-editor {
-  font-family: "Montserrat", sans-serif;
   font-size: 16px;
   h2,
   h3,
@@ -31,7 +30,7 @@
     text-align: center;
     font-style: italic;
     font-size: 14px;
-    color: #6b6b6b;
+    color: white;
   }
   @media screen and (max-width: 1023.98px) {
     font-size: 14px;
@@ -47,7 +46,6 @@
   }
 }
 .entry-content {
-  font-family: "Montserrat", sans-serif;
   font-size: 16px;
   h2,
   h3,
@@ -57,6 +55,9 @@
   }
   h2 {
     font-size: 32px;
+  }
+  h2 strong {
+    color: white;
   }
   h3 {
     font-size: 26px;
@@ -97,7 +98,7 @@
     text-align: center;
     font-style: italic;
     font-size: 14px;
-    color: #6b6b6b;
+    color: white;
   }
   @media screen and (max-width: 1023.98px) {
     font-size: 14px;

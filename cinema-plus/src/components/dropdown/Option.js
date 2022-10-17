@@ -13,7 +13,7 @@ import { useDropdown } from "./dropdown-context";
 const Option = (props) => {
   // const { sortBy } = useSelector((state) => state.news);
   const { setShow } = useDropdown();
-  const { onClick } = props;
+  const { onClick, className } = props;
   const dispatch = useDispatch();
   const handleClick = (e) => {
     onClick && onClick();
@@ -27,7 +27,7 @@ const Option = (props) => {
   };
   return (
     <div
-      className="flex items-center justify-between px-3 py-4 rounded-md cursor-pointer dropdown-option hover:bg-neutral-600"
+      className={`flex items-center justify-between px-3 py-4 rounded-md cursor-pointer dropdown-option hover:bg-neutral-600 ${className}`}
       onClick={handleClick}
       {...props}
     >

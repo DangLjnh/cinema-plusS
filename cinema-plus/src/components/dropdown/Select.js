@@ -7,6 +7,7 @@ const Select = ({ children, className = "" }) => {
   const { toggle, show, setShow } = useDropdown();
   const selected = document.querySelector(".dropdown-selected");
   window.addEventListener("click", (e) => {
+    if (e.target.matches(".dropdown-option")) setShow(false);
     if (
       selected &&
       !selected.contains(e.target) &&

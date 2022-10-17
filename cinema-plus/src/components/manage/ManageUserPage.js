@@ -10,7 +10,7 @@ const ManageUserPage = () => {
     <>
       <div className="flex items-start justify-between">
         <ManageUserTitle
-          title="Users"
+          title="Manage users"
           desc="Here you can manage your user."
           desc2="If user signed in Google or Facebook, you can't change email and password."
         ></ManageUserTitle>
