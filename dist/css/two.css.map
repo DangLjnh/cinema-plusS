@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,IAAI,CAAC;EACH,KAAK,EAAE,IAAI;CACZ",
+    "sources": [
+        "../../cinema-plus/node_modules/node-sass/test/fixtures/watcher/main/two.scss"
+    ],
+    "names": [],
+    "file": "two.css"
+}

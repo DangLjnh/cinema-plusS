@@ -2,7 +2,7 @@ import axios from "axios";
 import Button from "components/button/Button";
 import FieldCheckboxes from "components/field/FieldCheckboxes";
 import Radio from "components/radio/Radio";
-import ManageUserTitle from "components/title/ManageUserTitle";
+import ManageTitle from "components/title/ManageTitle";
 import { clientSide, serverSide } from "config/config";
 import Field from "input/Field";
 import Input from "input/Input";
@@ -44,10 +44,14 @@ const BlogCategoriesCreate = () => {
   const handleCreateCategory = (values) => {
     setLoading(true);
     const result = categories?.filter((category) => {
-      return values?.slug === category.slug;
+      return (
+        slugify(values?.name) === category.slug ||
+        slugify(values?.slug) === category.slug
+      );
     });
     if (result.length > 0) {
       toast.error("Category already exist");
+      setLoading(false);
       return;
     } else {
       axios
@@ -71,11 +75,11 @@ const BlogCategoriesCreate = () => {
   return (
     <BlogCategoriesCreateStyle onSubmit={handleSubmit(handleCreateCategory)}>
       <div className="flex justify-between mt-[35px]">
-        <ManageUserTitle
+        <ManageTitle
           className=""
           title="Create categories"
           desc={`Add new category to system`}
-        ></ManageUserTitle>
+        ></ManageTitle>
         <Button
           className={"text-white h-[48px]"}
           onClick={() => navigate("/manage/categories")}

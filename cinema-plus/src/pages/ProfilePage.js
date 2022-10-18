@@ -1,6 +1,6 @@
 import axios from "axios";
 import Button from "components/button/Button";
-import ManageUserTitle from "components/title/ManageUserTitle";
+import ManageTitle from "components/title/ManageTitle";
 import { clientSide, serverSide } from "config/config";
 import { UserContext } from "contexts/UserProvider";
 import Field from "input/Field";
@@ -158,12 +158,12 @@ const ProfilePage = () => {
   return (
     <>
       <form onSubmit={handleSubmit(handleUpdateProfile)}>
-        <ManageUserTitle
+        <ManageTitle
           className=""
           title="Update profile"
           desc={`Here you can edit public information about yourself.`}
           desc2="If you signed in with Google or Facebook, you can't change your email and password."
-        ></ManageUserTitle>
+        ></ManageTitle>
         <div className=" form-layout">
           <Field>
             <p className="mb-3 text-[17px] text-white">Display name</p>

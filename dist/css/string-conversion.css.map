@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,GAAG,CAAC;EAAE,KAAK,EAAE,UAAU;CAAI",
+    "sources": [
+        "../../cinema-plus/node_modules/node-sass/test/fixtures/custom-functions/string-conversion.scss"
+    ],
+    "names": [],
+    "file": "string-conversion.css"
+}

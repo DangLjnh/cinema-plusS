@@ -152,7 +152,7 @@ const Header = ({ page, className }) => {
             );
           })}
         </div>
-        <Author dashboard={true} manageUser={false}></Author>
+        <Author dashboard={true} blog={true}></Author>
       </div>
       {page === "discovery" && <Search className={"search-header"}></Search>}
     </HeaderStyle>

@@ -1,6 +1,6 @@
 import React from "react";
 
-const ManageUserTitle = ({ title, desc, desc2 = "", className = "" }) => {
+const ManageTitle = ({ title, desc, desc2 = "", className = "" }) => {
   return (
     <div className={`mb-10 ${className}`}>
       <h1 className="mb-3 text-3xl font-medium text-white">{title}</h1>
@@ -10,4 +10,4 @@ const ManageUserTitle = ({ title, desc, desc2 = "", className = "" }) => {
   );
 };
 
-export default ManageUserTitle;
+export default ManageTitle;

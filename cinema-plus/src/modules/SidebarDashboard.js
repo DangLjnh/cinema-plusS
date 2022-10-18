@@ -35,7 +35,7 @@ const sidebarGeneral = [
   {
     id: 2,
     title: "Posts",
-    url: "/manage/post",
+    url: "/manage/posts",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"

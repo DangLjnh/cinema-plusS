@@ -12,6 +12,7 @@ import styled from "styled-components";
 import Table from "./Table";
 import { v4 } from "uuid";
 import Swal from "sweetalert2";
+import ReactPaginate from "react-paginate";
 
 const CategoriesTableStyle = styled.div`
   .pagination {
@@ -53,6 +54,9 @@ const CategoriesTable = ({ className }) => {
   const [itemPrevPage, setItemPrevPage] = useState(0);
   const [itemAfterPage, setItemAfterPage] = useState(8);
   const [pageCount, setPageCount] = useState(0);
+  useEffect(() => {
+    setPageCount(Math.ceil(categories.length / itemsPerPage));
+  }, [categories.length]);
   useEffect(() => {
     axios.get(`${clientSide}/get/categories`).then((response) => {
       setCategories(response.data);
@@ -130,6 +134,11 @@ const CategoriesTable = ({ className }) => {
       </tr>
     );
   };
+  const handlePageClick = (e) => {
+    setItemPrevPage(e.selected * 8);
+    setItemAfterPage((e.selected + 1) * 8);
+    window.scrollTo(0, 0);
+  };
   return (
     <CategoriesTableStyle className={className}>
       <Table>
@@ -150,6 +159,16 @@ const CategoriesTable = ({ className }) => {
             })}
         </tbody>
       </Table>
+      <ReactPaginate
+        breakLabel="..."
+        nextLabel="next >"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={1}
+        pageCount={pageCount}
+        previousLabel="< previous"
+        renderOnZeroPageCount={null}
+        className="my-10 pagination"
+      />
     </CategoriesTableStyle>
   );
 };

@@ -3,7 +3,7 @@ import Button from "components/button/Button";
 import FieldCheckboxes from "components/field/FieldCheckboxes";
 import ShowPassword from "components/other/ShowPassword";
 import Radio from "components/radio/Radio";
-import ManageUserTitle from "components/title/ManageUserTitle";
+import ManageTitle from "components/title/ManageTitle";
 import { clientSide, serverSide } from "config/config";
 import Field from "input/Field";
 import Input from "input/Input";
@@ -108,11 +108,11 @@ const UserCreate = () => {
   return (
     <div>
       <div className="flex justify-between mt-[35px]">
-        <ManageUserTitle
+        <ManageTitle
           className=""
           title="Create user"
           desc={`Add new user to system`}
-        ></ManageUserTitle>
+        ></ManageTitle>
         <Button
           className={"text-white h-[48px]"}
           onClick={() => navigate("/manage/user")}

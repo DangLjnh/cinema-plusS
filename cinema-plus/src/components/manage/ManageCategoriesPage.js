@@ -1,6 +1,6 @@
 import Button from "components/button/Button";
 import CategoriesTable from "components/table/CategoriesTable";
-import ManageUserTitle from "components/title/ManageUserTitle";
+import ManageTitle from "components/title/ManageTitle";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,10 +9,10 @@ const ManageCategoriesPage = () => {
   return (
     <div>
       <div className="flex items-start justify-between">
-        <ManageUserTitle
+        <ManageTitle
           title="Manage categories"
           desc="Here you can manage your category."
-        ></ManageUserTitle>
+        ></ManageTitle>
         <Button
           className={"text-white h-[48px]"}
           onClick={() => {

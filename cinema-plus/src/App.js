@@ -136,7 +136,7 @@ const App = () => {
             element={<BlogCategoriesUpdate></BlogCategoriesUpdate>}
           ></Route>
           <Route
-            path="/manage/post"
+            path="/manage/posts"
             element={<ManagePostPage></ManagePostPage>}
           ></Route>
           <Route

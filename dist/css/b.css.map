@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "ACAA,AAAA,GAAG,CAAC;EACA,OAAO,EAAE,IAAI;CAChB;;ADAD,AAAA,GAAG,CAAC;EACA,OAAO,EAAE,IAAI;CAChB",
+    "sources": [
+        "../../cinema-plus/node_modules/node-sass/test/fixtures/depth-first/b.scss",
+        "../../cinema-plus/node_modules/node-sass/test/fixtures/depth-first/b1.scss"
+    ],
+    "names": [],
+    "file": "b.css"
+}

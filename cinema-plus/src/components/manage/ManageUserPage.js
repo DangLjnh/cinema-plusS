@@ -1,6 +1,6 @@
 import Button from "components/button/Button";
 import UsersTable from "components/table/UsersTable";
-import ManageUserTitle from "components/title/ManageUserTitle";
+import ManageTitle from "components/title/ManageTitle";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,11 +9,11 @@ const ManageUserPage = () => {
   return (
     <>
       <div className="flex items-start justify-between">
-        <ManageUserTitle
+        <ManageTitle
           title="Manage users"
           desc="Here you can manage your user."
           desc2="If user signed in Google or Facebook, you can't change email and password."
-        ></ManageUserTitle>
+        ></ManageTitle>
         <Button
           className={"text-white h-[48px]"}
           onClick={() => {

@@ -3,7 +3,7 @@ import Button from "components/button/Button";
 import { Dropdown } from "components/dropdown";
 import FieldCheckboxes from "components/field/FieldCheckboxes";
 import Radio from "components/radio/Radio";
-import ManageUserTitle from "components/title/ManageUserTitle";
+import ManageTitle from "components/title/ManageTitle";
 import Toogle from "components/toogle/Toogle";
 import { clientSide } from "config/config";
 import Field from "input/Field";
@@ -26,11 +26,24 @@ import { UserContext } from "contexts/UserProvider";
 import slugify from "slugify";
 Quill.register("modules/imageUploader", ImageUploader);
 const PostCreateStyle = styled.div`
+  .dropdown-list::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 20px;
+  }
+
+  .dropdown-list::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+
+  .dropdown-list::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background-image: linear-gradient(to bottom, #808080, #2c3e50);
+  }
   .quill .ql-toolbar {
     position: sticky;
-    top: 0;
+    top: 72px;
     background-color: white;
-    z-index: 1000;
+    z-index: 101;
   }
 `;
 const PostCreate = () => {
@@ -41,6 +54,7 @@ const PostCreate = () => {
   const [option, setOption] = useState();
   const [check, setCheck] = useState(false);
   const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
   const {
     control, //mac dinh
     handleSubmit, //sử dụng để lấy value
@@ -97,6 +111,7 @@ const PostCreate = () => {
     setOption(item.name);
   };
   const handleCreatePost = (values) => {
+    setLoading(true);
     axios
       .post(`${clientSide}/post/post`, {
         uid: currentUser.uid,
@@ -123,7 +138,7 @@ const PostCreate = () => {
               })
               .then((res) => {
                 if (res) {
-                  // setLoading(false);
+                  setLoading(false);
                   toast.success("Create user successful");
                   reset();
                   setContent("");
@@ -138,11 +153,11 @@ const PostCreate = () => {
   return (
     <PostCreateStyle className="mb-10">
       <div className="flex justify-between">
-        <ManageUserTitle
+        <ManageTitle
           className=""
           title="Create post"
           desc={`Add new post to system`}
-        ></ManageUserTitle>
+        ></ManageTitle>
         <Button
           className={"text-white h-[48px]"}
           onClick={() => navigate("/manage/posts")}
@@ -181,7 +196,7 @@ const PostCreate = () => {
               <Dropdown.Select className="text-white">
                 {option || "Select the category"}
               </Dropdown.Select>
-              <Dropdown.List>
+              <Dropdown.List className="z-[102] h-[280px] overflow-y-auto dropdown-list">
                 {categories.length > 0 &&
                   categories.map((item) => (
                     <Dropdown.Option
@@ -261,8 +276,8 @@ const PostCreate = () => {
           <Button
             type="submit"
             className={"text-white w-[147px] h-[48px]"}
-            // isLoading={loading}
-            // disabled={loading}
+            isLoading={loading}
+            disabled={loading}
           >
             Create post
           </Button>

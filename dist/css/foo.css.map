@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,IAAI,CAAA;EAAC,UAAU,EAAC,KAAK;CAAE",
+    "sources": [
+        "../../cinema-plus/node_modules/node-sass/test/fixtures/watching-dir-02/foo.scss"
+    ],
+    "names": [],
+    "file": "foo.css"
+}

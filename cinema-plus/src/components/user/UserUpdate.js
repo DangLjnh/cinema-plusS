@@ -4,7 +4,7 @@ import FieldCheckboxes from "components/field/FieldCheckboxes";
 import ImageUpload from "components/image/ImageUpLoad";
 import ShowPassword from "components/other/ShowPassword";
 import Radio from "components/radio/Radio";
-import ManageUserTitle from "components/title/ManageUserTitle";
+import ManageTitle from "components/title/ManageTitle";
 import { clientSide, serverSide } from "config/config";
 import { UserContext } from "contexts/UserProvider";
 import Field from "input/Field";
@@ -81,22 +81,22 @@ const UserUpdate = () => {
     },
   });
   const handleReturnManage = () => {
-    if (userDetail.photoURL && checkUpdate === true) {
-      setLoadingImg(true);
-      axios
-        .post(`${clientSide}/delete/image`, {
-          uid: userDetail.uid,
-          publicID: userDetail.publicID,
-        })
-        .then((res) => {
-          if (res) {
-            setLoadingImg(false);
-            navigate("/manage/user");
-          }
-        });
-    } else {
-      navigate("/manage/user");
-    }
+    // if (userDetail.photoURL && checkUpdate === true) {
+    //   setLoadingImg(true);
+    //   axios
+    //     .post(`${clientSide}/delete/image`, {
+    //       uid: userDetail.uid,
+    //       publicID: userDetail.publicID,
+    //     })
+    //     .then((res) => {
+    //       if (res) {
+    //         setLoadingImg(false);
+    //         navigate("/manage/user");
+    //       }
+    //     });
+    // } else {
+    navigate("/manage/user");
+    // }
   };
   const handleDeleteImage = () => {
     setLoadingImg(true);
@@ -175,12 +175,12 @@ const UserUpdate = () => {
   }, [reset, userDetail]);
   return (
     <>
-      <div className="flex justify-between mt-[35px]">
-        <ManageUserTitle
+      <div className="flex justify-between">
+        <ManageTitle
           className=""
           title="Update user"
           desc={`Update user information uID: ${userID}`}
-        ></ManageUserTitle>
+        ></ManageTitle>
         <Button className={"text-white h-[48px]"} onClick={handleReturnManage}>
           Return manage user
         </Button>

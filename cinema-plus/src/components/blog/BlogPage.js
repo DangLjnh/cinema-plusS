@@ -3,6 +3,7 @@ import BlogBanner from "./BlogBanner";
 import styled from "styled-components";
 import TitlePosts from "components/title/TitlePosts";
 import PostItem from "components/post/PostItem";
+import BlogCategoriesSide from "components/categories/BlogCategoriesSide";
 const BlogMoviePageStyle = styled.div`
   .post-new-item:first-child {
     grid-column: 1/3;
@@ -76,73 +77,8 @@ const BlogPage = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-3 w-full h-[500px]">
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Quan điểm tranh luận
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Quan điểm tranh luận
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Phim
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Quan điểm tranh luận
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Quan điểm tranh luận
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Phim
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Quan điểm tranh luận
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Quan điểm tranh luận
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Phim
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Truyền cảm hứng
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Quan điểm tranh luận
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Phim
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Truyền cảm hứng
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Quan điểm tranh luận
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Phim
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Truyền cảm hứng
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Quan điểm tranh luận
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Phim
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Truyền cảm hứng
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Quan điểm tranh luận
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Phim
-            </p>
-            <p className="px-4 py-[8px] !font-normal text-white rounded-full bg-neutral-700 hover:bg-neutral-600">
-              Truyền cảm hứng
-            </p>
+          <div className="flex flex-wrap items-center w-full gap-3">
+            <BlogCategoriesSide></BlogCategoriesSide>
           </div>
         </div>
       </div>

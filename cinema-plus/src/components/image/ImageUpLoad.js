@@ -6,6 +6,7 @@ const ImageUpLoad = ({
   handleDeleteImage,
   handleUploadImage,
   loadingImg,
+  className = "",
 }) => {
   return (
     <>
@@ -14,7 +15,7 @@ const ImageUpLoad = ({
           userDetail.photoURL === "" || !userDetail.photoURL
             ? "cursor-pointer"
             : ""
-        } flex items-center justify-center bg-neutral-400 border border-neutral-300 border-dashed w-full min-h-[200px] relative overflow-hidden group h-full !rounded-full`}
+        } flex items-center justify-center bg-neutral-400 border border-neutral-300 border-dashed w-full min-h-[200px] relative overflow-hidden group h-full rounded-full ${className}`}
       >
         <input
           type="file"
@@ -49,7 +50,7 @@ const ImageUpLoad = ({
         {userDetail.photoURL && !loadingImg && (
           <>
             <img
-              src={userDetail?.photoURL}
+              src={userDetail?.photoURL || "/default-image.png"}
               className="object-cover w-full h-full"
               alt=""
             />

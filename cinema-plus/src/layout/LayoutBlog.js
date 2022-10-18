@@ -2,11 +2,13 @@ import Author from "../components/author/Author";
 import Sidebar from "modules/Sidebar";
 import SidebarDashboard from "modules/SidebarDashboard";
 import SidebarDetail from "modules/SidebarDetail";
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { useContext } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "./Header";
 import Logo from "components/other/Logo";
+import Button from "components/button/Button";
+import { UserContext } from "contexts/UserProvider";
 const LayoutBlogStyle = styled.div`
   margin: 0 80px;
   .header-detail {
@@ -25,16 +27,28 @@ const LayoutBlogStyle = styled.div`
   }
 `;
 const LayoutBlog = () => {
+  const navigate = useNavigate();
+  let [currentUser] = useContext(UserContext);
   return (
     <>
       <LayoutBlogStyle>
         <Header page="home" className=" header-detail"></Header>
         <div className="flex justify-between my-10 header-dashboard">
           <Logo className={"w-[180px] "}></Logo>
-          <div className="flex items-center gap-x-5">
-            <p className="text-white">Movie</p>
-            <p className="">Tv show</p>
-          </div>
+          {currentUser.role === 1 && (
+            <Button
+              className={"text-white h-[48px]"}
+              onClick={() => navigate("/dashboard")}
+            >
+              Dashboard
+            </Button>
+          )}
+          <Button
+            className={"text-white h-[48px]"}
+            onClick={() => navigate("/")}
+          >
+            Go to watch movie
+          </Button>
           <div className="flex items-center justify-end gap-x-5">
             <Author></Author>
           </div>

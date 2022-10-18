@@ -1,6 +1,6 @@
 import Button from "components/button/Button";
 import DashboardItem from "components/dashboard/DashboardItem";
-import ManageUserTitle from "components/title/ManageUserTitle";
+import ManageTitle from "components/title/ManageTitle";
 import UsersTable from "../components/table/UsersTable";
 import React from "react";
 import styled from "styled-components";
@@ -167,10 +167,10 @@ const DashboardPage = () => {
   return (
     <DashboardPageStyle>
       <div className="flex items-center justify-between">
-        <ManageUserTitle
+        <ManageTitle
           title="Dashboard"
           desc="Here you can manage dashboard."
-        ></ManageUserTitle>
+        ></ManageTitle>
       </div>
       <div className="grid grid-cols-4 gap-x-8">
         {dashboardList.map((item) => {

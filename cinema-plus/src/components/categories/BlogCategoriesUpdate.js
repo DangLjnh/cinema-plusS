@@ -2,7 +2,7 @@ import axios from "axios";
 import Button from "components/button/Button";
 import FieldCheckboxes from "components/field/FieldCheckboxes";
 import Radio from "components/radio/Radio";
-import ManageUserTitle from "components/title/ManageUserTitle";
+import ManageTitle from "components/title/ManageTitle";
 import { clientSide } from "config/config";
 import Field from "input/Field";
 import Input from "input/Input";
@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import slugify from "slugify";
 import { status } from "utils/constant";
 
 const BlogCategoriesUpdate = () => {
@@ -46,14 +47,17 @@ const BlogCategoriesUpdate = () => {
   const handleUpdateCategory = (values) => {
     setLoading(true);
     const result = categories?.filter((category) => {
-      return values?.slug === category.slug;
+      return (
+        slugify(values?.name) === category.slug ||
+        slugify(values?.slug) === category.slug
+      );
     });
     if (result.length > 0 && categoryDetail.slug !== values.slug) {
       toast.error("Email already exist");
       return;
     } else {
       axios
-        .post(`${clientSide}/post/updateCategory`, {
+        .post(`${clientSide}/post/update/category`, {
           categoryID: values.categoryID,
           name: values.name,
           slug: values.slug,
@@ -74,11 +78,11 @@ const BlogCategoriesUpdate = () => {
   return (
     <form onSubmit={handleSubmit(handleUpdateCategory)}>
       <div className="flex justify-between mt-[35px]">
-        <ManageUserTitle
+        <ManageTitle
           className=""
           title="Update category"
           desc={`Update category categoryID: ${categoryID}`}
-        ></ManageUserTitle>
+        ></ManageTitle>
         <Button className={"text-white h-[48px]"}>Return manage user</Button>
       </div>
       <div className="form-layout">

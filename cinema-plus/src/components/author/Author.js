@@ -11,7 +11,7 @@ const AuthorStyled = styled.div`
     }
   }
 `;
-const Author = ({ manageUser = true, dashboard = false }) => {
+const Author = ({ dashboard = false, blog = false }) => {
   const navigate = useNavigate();
   let [currentUser, setCurrentUser] = useContext(UserContext);
   return (
@@ -22,6 +22,14 @@ const Author = ({ manageUser = true, dashboard = false }) => {
           onClick={() => navigate("/dashboard")}
         >
           Dashboard
+        </Button>
+      )}
+      {blog && (
+        <Button
+          className={"text-white h-[48px]"}
+          onClick={() => navigate("/blog")}
+        >
+          Go to blog
         </Button>
       )}
       {currentUser &&

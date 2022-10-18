@@ -182,7 +182,7 @@ app.post("/post/category", (req, resp) => {
     resp.send(result);
   });
 });
-app.post("/post/updateCategory", (req, resp) => {
+app.post("/post/update/category", (req, resp) => {
   let data = {
     name: req.body.name,
     slug: req.body.slug,
@@ -199,7 +199,6 @@ app.post("/post/updateCategory", (req, resp) => {
   );
 });
 app.post("/post/post", (req, resp) => {
-  console.log(req.body);
   let data = {
     uid: req.body.uid,
     nameAuthor: req.body.nameAuthor,
@@ -216,6 +215,28 @@ app.post("/post/post", (req, resp) => {
     resp.send(result);
     console.log(err);
   });
+});
+app.post("/post/update/post", (req, resp) => {
+  let data = {
+    title: req.body.title,
+    slug: req.body.slug,
+    categoryName: req.body.categoryName,
+    photoURL: req.body.photoURL,
+    publicID: req.body.publicID,
+    hot: req.body.hot,
+    status: req.body.status,
+    content: req.body.content,
+  };
+  let postID = req.body.postID;
+  console.log(req.body.postID);
+  db.query(
+    `UPDATE posts SET ? WHERE postID = ${postID}`,
+    data,
+    function (err, result) {
+      if (err) throw err;
+      resp.send(result);
+    }
+  );
 });
 app.post("/upload", (req, res) => {
   const uid = req.body.uid;
@@ -364,6 +385,29 @@ app.post("/delete/image", (req, resp) => {
       }
     });
 });
+app.post("/delete/image/post", (req, resp) => {
+  const postID = req.body.postID;
+  cloudinary.uploader
+    .destroy(req.body.publicID, function (error, result) {
+      console.log(result, error);
+    })
+    .then((res) => {
+      if (res) {
+        let data = {
+          photoURL: "",
+          publicID: "",
+        };
+        db.query(
+          `UPDATE posts SET ? WHERE postID = ${postID}`,
+          data,
+          function (err, results) {
+            if (err) throw err;
+            resp.send(results);
+          }
+        );
+      }
+    });
+});
 app.post("/delete/category/:categoryID", (req, resp) => {
   const { categoryID } = req?.body;
   db.query(
@@ -375,5 +419,14 @@ app.post("/delete/category/:categoryID", (req, resp) => {
       }
     }
   );
+});
+app.post("/delete/post/:postID", (req, resp) => {
+  const { postID } = req?.body;
+  db.query(`DELETE FROM posts WHERE postID=${postID}`, (err, result) => {
+    resp.send(result);
+    if (err) {
+      console.log(err);
+    }
+  });
 });
 app.listen(port, console.log(`Server started on port ${port}`));
