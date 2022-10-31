@@ -38,17 +38,39 @@ const sidebarGeneral = [
     url: "/manage/posts",
     icon: (
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
+        width="24"
+        height="24"
         viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="w-7 h-7"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
       >
         <path
+          d="M22 16.7399V4.66994C22 3.46994 21.02 2.57994 19.83 2.67994H19.77C17.67 2.85994 14.48 3.92994 12.7 5.04994L12.53 5.15994C12.24 5.33994 11.76 5.33994 11.47 5.15994L11.22 5.00994C9.44 3.89994 6.26 2.83994 4.16 2.66994C2.97 2.56994 2 3.46994 2 4.65994V16.7399C2 17.6999 2.78 18.5999 3.74 18.7199L4.03 18.7599C6.2 19.0499 9.55 20.1499 11.47 21.1999L11.51 21.2199C11.78 21.3699 12.21 21.3699 12.47 21.2199C14.39 20.1599 17.75 19.0499 19.93 18.7599L20.26 18.7199C21.22 18.5999 22 17.6999 22 16.7399Z"
+          stroke="currentColor"
+          strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
+        />
+        <path
+          d="M12 5.48999V20.49"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M7.75 8.48999H5.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M8.5 11.49H5.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     ),
@@ -114,16 +136,22 @@ const sidebarGeneral = [
   {
     id: 123,
     title: "Pending",
-    url: "/manage/user",
+    url: "/manage/pending/post",
     icon: (
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
         viewBox="0 0 24 24"
-        className="w-6 h-6"
-        stroke="currentColor"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path>
-        <path d="M13 7h-2v5.414l3.293 3.293 1.414-1.414L13 11.586z"></path>
+        <path
+          d="M15.24 2H8.76004C5.00004 2 4.71004 5.38 6.74004 7.22L17.26 16.78C19.29 18.62 19 22 15.24 22H8.76004C5.00004 22 4.71004 18.62 6.74004 16.78L17.26 7.22C19.29 5.38 19 2 15.24 2Z"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
     ),
     onclick: () => {},

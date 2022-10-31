@@ -1,11 +1,20 @@
 import Button from "components/button/Button";
 import UsersTable from "components/table/UsersTable";
 import ManageTitle from "components/title/ManageTitle";
+import { UserContext } from "contexts/UserProvider";
 import React from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { userRole } from "utils/constant";
 
 const ManageUserPage = () => {
   const navigate = useNavigate();
+  const [currentUser] = useContext(UserContext);
+  if (currentUser.role !== userRole.admin) {
+    return (
+      <ManageTitle title="You don't have access to this page!!!"></ManageTitle>
+    );
+  }
   return (
     <>
       <div className="flex items-start justify-between">

@@ -11,6 +11,8 @@ import Button from "components/button/Button";
 import { UserContext } from "contexts/UserProvider";
 const LayoutBlogStyle = styled.div`
   margin: 0 80px;
+  min-height: 100vh;
+  /* margin: 0 auto -50px; */
   .header-detail {
     display: none;
   }
@@ -59,13 +61,13 @@ const LayoutBlog = () => {
           </div>
         </div>
       </LayoutBlogStyle>
-      <div className="mt-10 h-[20px] p-5 text-white -mx-5 bg-neutral-600 flex justify-between items-center">
+      <footer className="mt-auto h-[20px] p-5 text-white -mx-5 bg-neutral-600 flex justify-between items-center">
         <p>Copyright Dang Linh © 19/7/2022</p>
         <div className="flex items-center gap-x-3">
           <p>facebook</p>
           <p>ithub</p>
         </div>
-      </div>
+      </footer>
     </>
   );
 };

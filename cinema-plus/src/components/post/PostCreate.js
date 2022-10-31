@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { imgbbAPI, status } from "utils/constant";
+import { imgbbAPI, status, userRole } from "utils/constant";
 import { v4 } from "uuid";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -52,6 +52,7 @@ const PostCreate = () => {
   const [categories, setCategories] = useState([]);
   const [posts, setPosts] = useState([]);
   const [option, setOption] = useState();
+  const [optionID, setOptionID] = useState();
   const [check, setCheck] = useState(false);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -109,6 +110,7 @@ const PostCreate = () => {
   );
   const handleClickOption = (item) => {
     setOption(item.name);
+    setOptionID(item.categoryID);
   };
   const handleCreatePost = (values) => {
     setLoading(true);
@@ -119,8 +121,10 @@ const PostCreate = () => {
         title: values.title,
         slug: slugify(values.slug || values.title),
         categoryName: option,
+        categoryID: optionID,
         photoURL: "",
         publicID: "",
+        photoUser: currentUser.photoURL,
         hot: values.hot,
         status: values.status,
         content,
@@ -143,6 +147,7 @@ const PostCreate = () => {
                   reset();
                   setContent("");
                   setOption("");
+                  setOptionID("");
                 }
               });
           }
@@ -216,47 +221,50 @@ const PostCreate = () => {
             )}
           </Field>
         </div>
-        <div className="form-layout">
-          <Field>
-            <p className="mb-3 text-[17px] text-white">Feature post</p>
-            <Toogle
-              register={register}
-              check={check}
-              onChange={() => {
-                setCheck(!check);
-              }}
-            ></Toogle>
-          </Field>
-          <Field>
-            <p className="mb-3 text-[17px] text-white">Status</p>
-            <FieldCheckboxes>
-              <Radio
-                name="status"
-                control={control}
-                checked={Number(watchStatus) === status.approve}
-                value={status.approve}
-              >
-                Approve
-              </Radio>
-              <Radio
-                name="status"
-                control={control}
-                checked={Number(watchStatus) === status.pending}
-                value={status.pending}
-              >
-                Pending
-              </Radio>
-              <Radio
-                name="status"
-                control={control}
-                checked={Number(watchStatus) === status.reject}
-                value={status.reject}
-              >
-                Reject
-              </Radio>
-            </FieldCheckboxes>
-          </Field>
-        </div>
+        {currentUser?.role === userRole.admin && (
+          <div className="form-layout">
+            <Field>
+              <p className="mb-3 text-[17px] text-white">Feature post</p>
+              <Toogle
+                register={register}
+                check={check}
+                onChange={() => {
+                  setCheck(!check);
+                }}
+              ></Toogle>
+            </Field>
+            <Field>
+              <p className="mb-3 text-[17px] text-white">Status</p>
+              <FieldCheckboxes>
+                <Radio
+                  name="status"
+                  control={control}
+                  checked={Number(watchStatus) === status.approve}
+                  value={status.approve}
+                >
+                  Approve
+                </Radio>
+                <Radio
+                  name="status"
+                  control={control}
+                  checked={Number(watchStatus) === status.pending}
+                  value={status.pending}
+                >
+                  Pending
+                </Radio>
+                <Radio
+                  name="status"
+                  control={control}
+                  checked={Number(watchStatus) === status.reject}
+                  value={status.reject}
+                >
+                  Reject
+                </Radio>
+              </FieldCheckboxes>
+            </Field>
+          </div>
+        )}
+
         <div className="mb-10">
           <Field>
             <p className="mb-3 text-[17px] text-white">Content</p>

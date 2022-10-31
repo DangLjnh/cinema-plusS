@@ -71,7 +71,7 @@ const HeaderStyle = styled.div`
   }
 `;
 
-const Header = ({ page, className }) => {
+const Header = ({ page, className, blog }) => {
   const { isActive } = useSelector((state, action) => state.news);
   const dispatch = useDispatch();
   let directions = [];

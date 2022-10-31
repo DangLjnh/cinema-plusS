@@ -103,13 +103,13 @@ const PostUpdate = () => {
   const handleUploadImage = (e) => {
     setLoadingImg(true);
     const formData = new FormData();
-    formData.append("uid", postDetail.postID);
+    formData.append("postID", postDetail.postID);
     formData.append("file", e.target.files[0]);
     axios.post(`${clientSide}/upload/post`, formData).then((res) => {
       if (res) {
         axios
           .post(`${clientSide}/get/postItem`, {
-            postID: postID,
+            postID: postDetail.postID,
           })
           .then((res) => {
             setLoadingImg(false);
@@ -129,7 +129,7 @@ const PostUpdate = () => {
         if (res) {
           axios
             .post(`${clientSide}/get/postItem`, {
-              postID: postID,
+              postID: postDetail.postID,
             })
             .then((res) => {
               setLoadingImg(false);

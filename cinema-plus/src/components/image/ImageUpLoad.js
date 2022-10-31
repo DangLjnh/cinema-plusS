@@ -1,4 +1,5 @@
 import React from "react";
+import { userProvider } from "utils/constant";
 
 const ImageUpLoad = ({
   userDetail,
@@ -15,7 +16,7 @@ const ImageUpLoad = ({
           userDetail.photoURL === "" || !userDetail.photoURL
             ? "cursor-pointer"
             : ""
-        } flex items-center justify-center bg-neutral-400 border border-neutral-300 border-dashed w-full min-h-[200px] relative overflow-hidden group h-full rounded-full ${className}`}
+        }  flex items-center justify-center bg-neutral-400 border border-neutral-300 border-dashed w-full min-h-[200px] relative overflow-hidden group h-full rounded-full ${className}`}
       >
         <input
           type="file"

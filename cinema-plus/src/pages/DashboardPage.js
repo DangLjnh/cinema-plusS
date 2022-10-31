@@ -12,6 +12,8 @@ import { useState } from "react";
 import { clientSide } from "config/config";
 import axios from "axios";
 import { useEffect } from "react";
+import RecentPostsTable from "components/table/RecentPostsTable";
+import RecentUsersTable from "components/table/RecentUsersTable";
 const DashboardPageStyle = styled.div`
   .grid-table {
     grid-template-columns: 2fr 1fr;
@@ -185,149 +187,9 @@ const DashboardPage = () => {
           );
         })}
       </div>
-      <div className="grid mt-10 grid-table gap-x-10">
-        <div>
-          <div className="flex justify-between mb-2">
-            <p className="text-xl text-white">Recent posts</p>
-            <div className="flex items-center cursor-pointer see-more gap-x-1">
-              <p>See more</p>
-              <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                  />
-                </svg>
-              </span>
-            </div>
-          </div>
-          <Table>
-            <thead>
-              <tr>
-                <th>Info</th>
-                <th>Email</th>
-                <th>Status</th>
-                <th className="bg-">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="flex items-center gap-x-3">
-                  <img
-                    src={"/user.png"}
-                    alt=""
-                    className="flex-shrink-0 object-cover w-10 h-10 rounded-full"
-                  />
-                  <div className="flex-1">
-                    <p className="text-[#dfe6e9] capitalize">
-                      {/* {user.displayName} */}
-                      Linh
-                    </p>
-                    <p className="text-sm text-gray-400">
-                      22-082-2022
-                      {/* {user.createdAt.slice(0, 10)} */}
-                    </p>
-                  </div>
-                </td>
-                <td>danglinh@gmail.com</td>
-                <td>Arroved</td>
-                <td>hihihihi</td>
-              </tr>
-              <tr>
-                <td>asd</td>
-                <td>asd</td>
-                <td>asd</td>
-                <td>asd</td>
-              </tr>
-            </tbody>
-          </Table>
-        </div>
-        <div>
-          <div className="flex justify-between mb-2">
-            <p className="text-xl text-white">Recent users</p>
-            <div className="flex items-center cursor-pointer see-more gap-x-1">
-              <p>See more</p>
-              <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                  />
-                </svg>
-              </span>
-            </div>
-          </div>
-          <Table>
-            <thead>
-              <tr>
-                <th>Info</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="flex items-center gap-x-3">
-                  <img
-                    src={"/user.png"}
-                    alt=""
-                    className="flex-shrink-0 object-cover w-10 h-10 rounded-full"
-                  />
-                  <div className="flex-1">
-                    <p className="text-[#dfe6e9] capitalize">
-                      {/* {user.displayName} */}
-                      Dang Thanh Nhat Linh
-                    </p>
-                    <p className="text-sm text-gray-400">
-                      22-082-2022
-                      {/* {user.createdAt.slice(0, 10)} */}
-                    </p>
-                  </div>
-                </td>
-                <td className="">
-                  <div className="flex gap-x-5">
-                    <ActionEdit
-                    // onClick={() =>
-                    //   navigate(`/manage/user/update-user/${user.uid}`)
-                    // }
-                    ></ActionEdit>
-                    <ActionDelete
-                    // onClick={() => {
-                    //   handleDeleteUser(user);
-                    // }}
-                    ></ActionDelete>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>asd</td>
-                <td>asd</td>
-              </tr>
-              {/* {usersFilterAdmin?.length > 0 &&
-              usersFilterAdmin
-                .slice(itemPrevPage, itemAfterPage)
-                .map((user) => {
-                  if (currentUser.uid === user.uid) return null;
-                  return renderUserItem(user);
-                })} */}
-            </tbody>
-          </Table>
-        </div>
+      <div className="grid mt-10 mb-10 grid-table gap-x-10">
+        <RecentPostsTable></RecentPostsTable>
+        <RecentUsersTable></RecentUsersTable>
       </div>
     </DashboardPageStyle>
   );

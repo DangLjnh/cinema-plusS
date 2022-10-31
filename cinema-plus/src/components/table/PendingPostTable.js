@@ -5,18 +5,19 @@ import ActionView from "components/action/ActionView";
 import LabelStatus from "components/label/LabelStatus";
 import { clientSide } from "config/config";
 import React from "react";
-import { useEffect } from "react";
 import { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { status, userRole } from "utils/constant";
+import { status } from "utils/constant";
 import { v4 } from "uuid";
-import Table from "./Table";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
-import { UserContext } from "contexts/UserProvider";
-import { useContext } from "react";
-const PostsTableStyle = styled.div`
+import Table from "./Table";
+import ActionApprove from "components/action/ActionApprove";
+import ActionReject from "components/action/ActionReject";
+import { toast } from "react-toastify";
+const PendingPostTableStyle = styled.div`
   .pagination {
     display: flex;
     justify-content: center;
@@ -47,32 +48,29 @@ const PostsTableStyle = styled.div`
     }
   }
 `;
-const PostsTable = () => {
+const PendingPostTable = () => {
   const itemsPerPage = 8;
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
+  const [postsPending, setPostsPending] = useState([]);
   const [itemPrevPage, setItemPrevPage] = useState(0);
   const [itemAfterPage, setItemAfterPage] = useState(8);
   const [pageCount, setPageCount] = useState(0);
-  const [currentUser] = useContext(UserContext);
   useEffect(() => {
     axios.get(`${clientSide}/get/posts`).then((response) => {
-      if (response) {
-        if (currentUser.role === userRole.admin) {
-          setPosts(response.data);
-        }
-        if (currentUser.role !== userRole.admin) {
-          const filterPostByAuthor = response?.data?.filter((post) => {
-            return post.uid === currentUser.uid;
-          });
-          setPosts(filterPostByAuthor);
-        }
-      }
+      setPosts(response.data);
     });
-  }, [currentUser.role, currentUser.uid]);
+  }, []);
   useEffect(() => {
-    setPageCount(Math.ceil(posts.length / itemsPerPage));
-  }, [posts.length]);
+    setPostsPending(
+      posts.filter((post) => {
+        return post.status === status.pending;
+      })
+    );
+  }, [posts]);
+  useEffect(() => {
+    setPageCount(Math.ceil(postsPending.length / itemsPerPage));
+  }, [postsPending.length]);
   const renderPostStatus = (statuss) => {
     switch (statuss) {
       case status.approve:
@@ -85,27 +83,28 @@ const PostsTable = () => {
         break;
     }
   };
-  const handleDeletePost = (post) => {
+  const handleRejectPost = (post) => {
     Swal.fire({
-      title: "Are you sure?",
+      title: "Are you reject post?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#7877fa",
       cancelButtonColor: "#ee5253",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, reject it!",
       // iconColor: "#7877fa",
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: "Deleted!",
-          text: "User has been deleted.",
+          title: "Rejected!",
+          text: "User has been rejected.",
           icon: "success",
           confirmButtonColor: "#7877fa",
         });
         axios
-          .post(`${clientSide}/delete/post/${post.postID}`, {
+          .post(`${clientSide}/post/update/postStatus`, {
             postID: post.postID,
+            status: status.reject,
           })
           .then((res) => {
             if (res) {
@@ -116,6 +115,21 @@ const PostsTable = () => {
           });
       }
     });
+  };
+  const handleApprovePost = (post) => {
+    axios
+      .post(`${clientSide}/post/update/postStatus`, {
+        postID: post.postID,
+        status: status.approve,
+      })
+      .then((res) => {
+        if (res) {
+          axios.get(`${clientSide}/get/posts`).then((response) => {
+            toast.success("Approve post successfully!");
+            setPosts(response.data);
+          });
+        }
+      });
   };
   const renderPostItem = (post) => {
     if (!post) return;
@@ -157,16 +171,16 @@ const PostsTable = () => {
             <ActionView
               onClick={() => navigate(`/blog/post/${post.slug}/${post.postID}`)}
             ></ActionView>
-            <ActionEdit
-              onClick={() =>
-                navigate(`/manage/post/update-post/${post.postID}`)
-              }
-            ></ActionEdit>
-            <ActionDelete
+            <ActionApprove
               onClick={() => {
-                handleDeletePost(post);
+                handleApprovePost(post);
               }}
-            ></ActionDelete>
+            ></ActionApprove>
+            <ActionReject
+              onClick={() => {
+                handleRejectPost(post);
+              }}
+            ></ActionReject>
           </div>
         </td>
       </tr>
@@ -178,7 +192,7 @@ const PostsTable = () => {
     window.scrollTo(0, 0);
   };
   return (
-    <PostsTableStyle>
+    <PendingPostTableStyle>
       <Table>
         <thead>
           <tr>
@@ -191,8 +205,8 @@ const PostsTable = () => {
           </tr>
         </thead>
         <tbody>
-          {posts?.length > 0 &&
-            posts.slice(itemPrevPage, itemAfterPage).map((user) => {
+          {postsPending?.length > 0 &&
+            postsPending.slice(itemPrevPage, itemAfterPage).map((user) => {
               return renderPostItem(user);
             })}
         </tbody>
@@ -207,8 +221,8 @@ const PostsTable = () => {
         renderOnZeroPageCount={null}
         className="my-10 pagination"
       ></ReactPaginate>
-    </PostsTableStyle>
+    </PendingPostTableStyle>
   );
 };
 
-export default PostsTable;
+export default PendingPostTable;

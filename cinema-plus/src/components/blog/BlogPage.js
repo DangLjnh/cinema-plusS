@@ -4,16 +4,96 @@ import styled from "styled-components";
 import TitlePosts from "components/title/TitlePosts";
 import PostItem from "components/post/PostItem";
 import BlogCategoriesSide from "components/categories/BlogCategoriesSide";
+import { useEffect } from "react";
+import axios from "axios";
+import { clientSide } from "config/config";
+import { useState } from "react";
+import BlogForYou from "./BlogForYou";
+import ReactPaginate from "react-paginate";
+import { useNavigate } from "react-router-dom";
+import { v4 } from "uuid";
+import { useUser } from "contexts/UserProvider";
 const BlogMoviePageStyle = styled.div`
   .post-new-item:first-child {
+    img {
+      height: 100%;
+    }
     grid-column: 1/3;
     grid-row: 1/3;
   }
   .post-fy-item:first-child {
     grid-column: 1/3;
   }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    li {
+      cursor: pointer;
+    }
+    li:not(:first-child, :last-child) {
+      a {
+        padding: 8px 15px;
+        /* width: 35px;
+      height: 35px; */
+        border-radius: 50%;
+        font-size: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #262628;
+        &:hover {
+          background-color: #404040;
+        }
+      }
+    }
+    .selected {
+      a {
+        color: white;
+        background-color: ${(props) => props.theme.blueLight} !important;
+      }
+    }
+  }
 `;
 const BlogPage = () => {
+  const { currentUser } = useUser();
+  console.log(
+    "🚀 ~ file: BlogPage.js ~ line 61 ~ BlogPage ~ currentUser",
+    currentUser
+  );
+  const [posts, setPosts] = useState([]);
+  const itemsPerPage = 5;
+  const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+  const [itemPrevPage, setItemPrevPage] = useState(0);
+  const [itemAfterPage, setItemAfterPage] = useState(8);
+  const [pageCount, setPageCount] = useState(0);
+  const forYou = document.querySelector(".for-you");
+  const elDistanceToTop =
+    window.pageYOffset + forYou?.getBoundingClientRect().top;
+  const marginScrollTop = 50;
+  useEffect(() => {
+    axios.get(`${clientSide}/get/posts`).then((response) => {
+      setPosts(response.data);
+    });
+  }, []);
+  useEffect(() => {
+    setPageCount(Math.ceil(posts.length / itemsPerPage));
+  }, [posts.length]);
+  const postPopularList = posts.filter((post) => {
+    return !!+post.hot === true; //-!!+post.hot (convert 1 to true)
+  });
+  const newestPostList = [...posts]?.sort(
+    (a, b) =>
+      new Date(b?.createdAt.slice(0, 10)) - new Date(a?.createdAt.slice(0, 10))
+  );
+  const handlePageClick = (e) => {
+    setItemPrevPage(e.selected * itemsPerPage);
+    setItemAfterPage((e.selected + 1) * itemsPerPage);
+    window.scrollTo(0, elDistanceToTop - marginScrollTop);
+    // console.log(forYou.scrollTop);
+  };
   return (
     <BlogMoviePageStyle>
       <BlogBanner></BlogBanner>
@@ -21,63 +101,46 @@ const BlogPage = () => {
         <TitlePosts>
           Phổ biến trên Cinema<span className="font-semibold">Plus</span>
         </TitlePosts>
-        <div className="grid grid-cols-4 gap-x-6 mt-7">
-          <PostItem> </PostItem>
-          <PostItem> </PostItem>
-          <PostItem> </PostItem>
-          <PostItem> </PostItem>
+        <div className="grid grid-cols-3 gap-x-6 mt-7">
+          {postPopularList.slice(0, 3).map((post) => {
+            return <PostItem key={v4()} post={post}></PostItem>;
+          })}
         </div>
       </div>
       <div className="mt-[80px] mb-10">
         <TitlePosts>Mới nhất</TitlePosts>
         <div className="grid grid-cols-4 grid-rows-2 gap-5 mt-7">
-          <PostItem
-            className={"post-new-item"}
-            classNameTop="gap-x-10"
-            classNameTitle={"!text-2xl"}
-            date={true}
-          >
-            {" "}
-          </PostItem>
-          <PostItem className={"post-new-item"}> </PostItem>
-          <PostItem className={"post-new-item"}> </PostItem>
-          <PostItem className={"post-new-item"}> </PostItem>
-          <PostItem className={"post-new-item"}> </PostItem>
+          {newestPostList.slice(0, 5).map((post) => {
+            return (
+              <PostItem
+                key={v4()}
+                className={"post-new-item"}
+                post={post}
+              ></PostItem>
+            );
+          })}
         </div>
       </div>
-      <div className="mt-[80px] mb-10">
+      <div className="mt-[80px] mb-10 for-you">
         <TitlePosts>Dành cho bạn</TitlePosts>
-        <div className="grid grid-cols-3 gap-x-10 mt-7">
-          <div className="flex flex-col post-fy-item gap-y-8">
-            <div className="flex items-center gap-x-5">
-              <img
-                src="https://images.unsplash.com/photo-1519456264917-42d0aa2e0625?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-                alt=""
-                className="w-full h-[210px] object-cover"
-              />
-              <div className="flex flex-col justify-between post-fy-content gap-y-12">
-                <div className="flex items-center whitespace-nowrap gap-x-3">
-                  <p>Chuyện trò - tâm sự</p>
-                  <div className="w-[5px] h-[5px] bg-current rounded-full "></div>
-                  <p>8 phút đọc</p>
-                </div>
-                <div className="">
-                  <p className="text-lg font-medium text-white">
-                    Bị bắt nạt nơi công sở bắt nạt
-                  </p>
-                </div>
-                <div className="flex items-center gap-x-3">
-                  <img
-                    src="https://images.unsplash.com/photo-1557130680-0f816eef4743?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=813&q=80"
-                    alt=""
-                    className="object-cover w-6 h-6 rounded-full shrink-0"
-                  />
-                  <p className="text-sm">Dang Linh</p>
-                </div>
-              </div>
-            </div>
+        <div className="relative grid grid-cols-3 gap-x-10 mt-7">
+          <div className="flex flex-col post-fy-item gap-y-12">
+            {posts?.length > 0 &&
+              posts.slice(itemPrevPage, itemAfterPage).map((item) => {
+                return <BlogForYou key={v4()} post={item}></BlogForYou>;
+              })}
+            <ReactPaginate
+              breakLabel="..."
+              nextLabel="next >"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={1}
+              pageCount={pageCount}
+              previousLabel="< previous"
+              renderOnZeroPageCount={null}
+              className="pagination"
+            />
           </div>
-          <div className="flex flex-wrap items-center w-full gap-3">
+          <div className="flex sticky top-5 flex-wrap h-[250px] items-center w-full gap-3">
             <BlogCategoriesSide></BlogCategoriesSide>
           </div>
         </div>
@@ -87,3 +150,16 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+// eslint-disable-next-line no-lone-blocks
+{
+  /* <PostItem
+            className={"post-new-item"}
+            classNameTop="gap-x-10"
+            classNameTitle={"!text-2xl"}
+            date={true}
+          ></PostItem>
+          <PostItem className={"post-new-item"}> </PostItem>
+          <PostItem className={"post-new-item"}> </PostItem>
+          <PostItem className={"post-new-item"}> </PostItem>
+          <PostItem className={"post-new-item"}> </PostItem> */
+}

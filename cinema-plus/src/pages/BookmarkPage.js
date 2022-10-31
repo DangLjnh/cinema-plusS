@@ -7,7 +7,7 @@ import React from "react";
 const BookmarkPage = () => {
   return (
     <div>
-      <SidebarBookmarkHistory></SidebarBookmarkHistory>{" "}
+      <SidebarBookmarkHistory></SidebarBookmarkHistory>
       {/* <Dropdown
         className={`w-[200px] min-w-[135px] text-neutral-400  relative`}
       >

@@ -11,12 +11,12 @@ const AuthorStyled = styled.div`
     }
   }
 `;
-const Author = ({ dashboard = false, blog = false }) => {
+const Author = ({ dashboard = false, blog = false, bookmarkPost }) => {
   const navigate = useNavigate();
   let [currentUser, setCurrentUser] = useContext(UserContext);
   return (
     <>
-      {currentUser.role === 1 && dashboard && (
+      {dashboard && (
         <Button
           className={"text-white h-[48px]"}
           onClick={() => navigate("/dashboard")}
@@ -42,6 +42,14 @@ const Author = ({ dashboard = false, blog = false }) => {
             Sign in
           </Button>
         )}
+      {bookmarkPost && (
+        <Button
+          className={"text-white transition-all hover:opacity-80"}
+          onClick={() => navigate(`/blog/posts/bookmark/${currentUser.uid}`)}
+        >
+          Bookmark
+        </Button>
+      )}
 
       {currentUser && Object.keys(currentUser).length !== 0 && (
         <AuthorStyled className="flex items-center gap-x-5">
@@ -49,7 +57,7 @@ const Author = ({ dashboard = false, blog = false }) => {
             {currentUser.displayName}
           </h3>
           <img
-            src={currentUser.photoURL || "../user.png"}
+            src={currentUser.photoURL || "../../../user.png"}
             alt=""
             className="object-cover w-10 h-10 rounded-full"
           />

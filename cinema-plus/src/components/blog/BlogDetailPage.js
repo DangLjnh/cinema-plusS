@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import styled from "styled-components";
+import PostTitle from "components/post/PostTitle";
 const PostDetailsPageStyles = styled.div`
   /* padding-bottom: 100px; */
   .post {
@@ -118,14 +119,12 @@ const BlogDetailPage = () => {
           ></PostImage>
           <div className="post-info">
             <PostCategory
-              className="mb-6 bg-[#7877fa] text-[#1a161f]"
+              className="mb-6 bg-neutral-400 text-[#1a161f]"
               category={postInfo.category}
             >
               {postInfo.categoryName}
             </PostCategory>
-            <h1 className="font-medium text-white post-heading">
-              {postInfo.title}
-            </h1>
+            <PostTitle postInfo={postInfo}></PostTitle>
             <PostMeta postInfo={postInfo}></PostMeta>
           </div>
         </div>

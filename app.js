@@ -100,6 +100,42 @@ app.post("/get/postItem", (req, res) => {
     res.send(result);
   });
 });
+app.post("/get/postItemByUid", (req, res) => {
+  const { uid } = req.body;
+  db.query(`SELECT * FROM posts where uid=${uid}`, (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+    res.send(result);
+  });
+});
+app.post("/get/postItemByCategoryID", (req, res) => {
+  const { categoryID } = req.body;
+  db.query(
+    `SELECT * FROM posts where categoryID=${categoryID}`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
+    }
+  );
+});
+app.post("/get/bookmark/posts/:userID", (req, resp) => {
+  let data = {
+    uid: req.body.uid,
+  };
+  db.query(
+    `SELECT * FROM bookmarkpost where uid=${data.uid}`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      resp.send(result);
+    }
+  );
+});
+
 //POST
 app.post("/post/user", (req, resp) => {
   let data = {
@@ -205,8 +241,10 @@ app.post("/post/post", (req, resp) => {
     title: req.body.title,
     slug: req.body.slug,
     categoryName: req.body.categoryName,
+    categoryID: req.body.categoryID,
     photoURL: req.body.photoURL,
     publicID: req.body.publicID,
+    photoUser: req.body.photoUser,
     hot: req.body.hot,
     status: req.body.status,
     content: req.body.content,
@@ -228,9 +266,37 @@ app.post("/post/update/post", (req, resp) => {
     content: req.body.content,
   };
   let postID = req.body.postID;
-  console.log(req.body.postID);
   db.query(
     `UPDATE posts SET ? WHERE postID = ${postID}`,
+    data,
+    function (err, result) {
+      if (err) throw err;
+      resp.send(result);
+    }
+  );
+});
+app.post("/post/update/postStatus", (req, resp) => {
+  let data = {
+    status: req.body.status,
+  };
+  let postID = req.body.postID;
+  db.query(
+    `UPDATE posts SET ? WHERE postID = ${postID}`,
+    data,
+    function (err, result) {
+      if (err) throw err;
+      resp.send(result);
+    }
+  );
+});
+app.post("/post/update/bookmark/posts/:userID", (req, resp) => {
+  console.log(req.body);
+  let data = {
+    postID: req.body.postID,
+  };
+  let uid = req.body.uid;
+  db.query(
+    `UPDATE bookmarkpost SET ? WHERE uid = ${uid}`,
     data,
     function (err, result) {
       if (err) throw err;
@@ -320,6 +386,19 @@ app.post("/upload/post", (req, res) => {
     }
   );
   streamifier.createReadStream(file.data).pipe(cld_upload_stream);
+});
+app.post("/post/bookmark/posts/:userID", (req, resp) => {
+  let data = {
+    uid: req.body.uid,
+    email: req.body.email,
+    displayName: req.body.displayName,
+    postID: req.body.postID,
+  };
+  db.query("INSERT INTO bookmarkpost SET ?", data, function (err, result) {
+    // if (err) throw err;
+    console.log(result);
+    resp.send(result);
+  });
 });
 //DELETE
 app.post("/delete/currentUser", (req, resp) => {

@@ -3,10 +3,10 @@ import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 const PostCategoryStyle = styled.div`
   display: inline-block;
-  padding: 4px 18px;
+  padding: 4px 14px;
   border-radius: 10px;
   color: ${(props) => props.theme.gray6B};
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   a {
     display: block;
@@ -24,7 +24,7 @@ const PostCategory = ({
   // to = "/",
 }) => {
   return (
-    <NavLink to={`/category/${category?.slug}`}>
+    <NavLink to={`/blog/posts/category/${category}`}>
       <PostCategoryStyle type={type} className={`post-category ${className}`}>
         {children}
       </PostCategoryStyle>

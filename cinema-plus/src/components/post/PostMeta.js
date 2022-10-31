@@ -29,7 +29,7 @@ const PostMeta = ({ className, to = "/", postInfo }) => {
   return (
     <NavLink to={to}>
       <PostMetaStyle className={`post-info ${className}`}>
-        <span className="post-time">{postInfo.createdAt.slice(0, 10)}</span>
+        <span className="post-time">{postInfo?.createdAt?.slice(0, 10)}</span>
         <span className="post-dot"></span>
         <p>{postInfo?.nameAuthor}</p>
         {/* <NavLink

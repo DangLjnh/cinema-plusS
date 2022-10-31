@@ -34,6 +34,7 @@ const ButtonFB = () => {
         if (Object.keys(userCurrent).length !== 0) {
           axios
             .post(`${clientSide}/post/currentUser`, {
+              uid: userCurrent.uid,
               displayName: userCurrent.displayName,
               email: userCurrent.email,
               photoURL: userCurrent.photoURL,

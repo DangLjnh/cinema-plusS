@@ -14,7 +14,7 @@ import { handleFetchMovie } from "redux/handler";
 import DiscoveryTvShowPage from "pages/DiscoveryTvShowPage";
 import DetailPage from "pages/DetailPage";
 import LayoutDetail from "layout/LayoutDetail";
-import { tmdbAPI, tvAPI } from "config/config";
+import { clientSide, tmdbAPI, tvAPI } from "config/config";
 import WatchMoviePage from "pages/WatchMoviePage";
 import WatchTvPage from "pages/WatchTvPage";
 import LayoutDetailTv from "layout/LayoutDetailTv";
@@ -42,16 +42,19 @@ import ManagePostPage from "components/manage/ManagePostPage";
 import PostCreate from "components/post/PostCreate";
 import PostUpdate from "components/post/PostUpdate";
 import BlogDetailPage from "components/blog/BlogDetailPage";
+import BlogAuthorPage from "components/blog/BlogAuthorPage";
+import BlogCategoryPage from "components/blog/BlogCategoryPage";
+import BlogBookmark from "components/blog/BlogBookmark";
+import ManagePendingPostPage from "components/manage/ManagePendingPostPage";
 const App = () => {
-  let [currentUser, setCurrentUser] = useContext(UserContext);
+  const [currentUser, setCurrentUser] = useContext(UserContext);
   const cld = new Cloudinary({
     cloud: {
       cloudName: "dwkckmmr7",
     },
   });
-  // const myImage = cld.image("image-users/lr868fwjb6vo6hbrgvz3");
   useEffect(() => {
-    axios.get("http://localhost:8080/get/currentUser").then((response) => {
+    axios.get(`${clientSide}/get/currentUser`).then((response) => {
       const data = Object.assign({}, ...response.data);
       setCurrentUser(data);
     });
@@ -116,6 +119,10 @@ const App = () => {
             element={<ManageUserPage></ManageUserPage>}
           ></Route>
           <Route
+            path="/manage/pending/post"
+            element={<ManagePendingPostPage></ManagePendingPostPage>}
+          ></Route>
+          <Route
             path="/manage/user/update-user/:userID"
             element={<UserUpdate></UserUpdate>}
           ></Route>
@@ -153,6 +160,18 @@ const App = () => {
           <Route
             path="/blog/post/:slug/:postID"
             element={<BlogDetailPage></BlogDetailPage>}
+          ></Route>
+          <Route
+            path="/blog/posts/:authorID"
+            element={<BlogAuthorPage></BlogAuthorPage>}
+          ></Route>
+          <Route
+            path="/blog/posts/category/:categoryID"
+            element={<BlogCategoryPage></BlogCategoryPage>}
+          ></Route>
+          <Route
+            path="/blog/posts/bookmark/:userID"
+            element={<BlogBookmark></BlogBookmark>}
           ></Route>
         </Route>
         <Route element={<LayoutDetailTv></LayoutDetailTv>}>
